@@ -85,7 +85,7 @@ def convert_to_flac(file, start, end, name, export_path, text):
         segment.export(filename, format="flac")
     else:
         print("flac file exists, skipping")
-    return f"{name} {filename} {end-start}.0 {text}"
+    return f"{name} {filename} {end-start}.0 {text}\n"
 
 
 def read_tsv(file):

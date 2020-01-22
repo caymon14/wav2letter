@@ -12,6 +12,7 @@ import os
 
 import sox
 from pydub import AudioSegment
+import csv
 
 
 def find_transcript_files(dir):
@@ -72,10 +73,80 @@ def convert_to_flac(file, start, end, name, export_path, text):
     filename = f"{export_path}/{name}.flac"
     if not os.path.exists(filename):
         segment = AudioSegment.from_file(file)
-        segment = segment[start:end]
-        
+        if start is not None and end is not None:
+            segment = segment[start:end]
+        else:
+            start = 0
+            end = segment.duration_seconds * 1000
+
         os.makedirs(export_path, exist_ok=True)
+        segment = segment.set_sample_width(2)
+        segment = segment.set_frame_rate(16000)
         segment.export(filename, format="flac")
     else:
         print("flac file exists, skipping")
     return f"{name} {filename} {end-start}.0 {text}"
+
+
+def read_tsv(file):
+    rows = []
+    with open(file) as f:
+        reader = csv.DictReader(f, dialect="excel-tab")
+        for row in reader:
+            rows.append(row)
+
+    return rows
+
+
+def commonvoice_to_list(audio_path, f, commonvoice_location, line):
+    path = line['path']
+    text = line['sentence']
+    text = text.lower()
+    text = text.replace("\"", "")
+    text = text.replace("!", "")
+    text = text.replace("?", "")
+    text = text.replace(".", "")
+    text = text.replace(",", "")
+    text = text.replace("’", "")
+    text = text.replace("‘", "")
+
+    export_dir = f"{audio_path}/commonvoice/{f}"
+    lst_record = convert_to_flac(f"{commonvoice_location}/clips/{path}",
+                                 None, None, path, export_dir, text)
+    return lst_record
+
+
+def ami_ihm_to_list(audio_path, ami_ihm_location, line):
+    name, text = line
+    _, scenario, headphone, _, start, end = name.split("_")
+    export_dir = f"{audio_path}/ihm/{scenario}"
+    lst_record = convert_to_flac(f"{ami_ihm_location}/{scenario}/audio/{scenario}.Headset-{int(headphone[2:])}.wav",
+                                 int(start)*10, int(end)*10, name, export_dir, text)
+    return lst_record
+
+
+def ami_sdm_to_list(audio_path, ami_sdm_location, line):
+    name, text = line
+    _, scenario, _, _, start, end = name.split("_")
+    export_dir = f"{audio_path}/sdm/{scenario}"
+    lst_record = convert_to_flac(f"{ami_sdm_location}/{scenario}/audio/{scenario}.Array1-01.wav",
+                                 int(start)*10, int(end)*10, name, export_dir, text)
+    return lst_record
+
+
+def ami_mdm_to_list(audio_path, ami_mdm_location, line):
+    name, text = line
+    _, scenario, _, _, start, end = name.split("_")
+    export_dir = f"{audio_path}/mdm/{scenario}"
+    lst_record = convert_to_flac(f"{ami_mdm_location}/{scenario}/{scenario}_MDM8.wav",
+                                 int(start)*10, int(end)*10, name, export_dir, text)
+    return lst_record
+
+
+def ted_to_list(audio_path, f, ted_location, line):
+    name, text = line
+    scenario, start, end = name.split("-")
+    export_dir = f"{audio_path}/ted/{scenario}"
+    lst_record = convert_to_flac(f"{ted_location}/legacy/{f}/sph/{scenario}.sph",
+                                 int(start)*10, int(end)*10, name, export_dir, text)
+    return lst_record

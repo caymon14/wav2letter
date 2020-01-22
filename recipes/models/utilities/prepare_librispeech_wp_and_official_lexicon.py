@@ -103,7 +103,7 @@ if __name__ == "__main__":
                     fvocab_filt.write(val.replace("\u2581", "_") + "\n")
 
     # Generating decoder/*
-    lm = "3-gram.pruned.1e-7"
+    lm = "4-gram"
     print("Downloading Librispeech official LM model...\n", flush=True)
     arpa_file = os.path.join(decoder_path, lm + ".arpa")
     if not os.path.exists(arpa_file):

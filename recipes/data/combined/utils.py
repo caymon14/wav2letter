@@ -120,8 +120,12 @@ def ami_ihm_to_list(audio_path, ami_ihm_location, line):
     name, text = line
     _, scenario, headphone, _, start, end = name.split("_")
     export_dir = f"{audio_path}/ihm/{scenario}"
-    lst_record = convert_to_flac(f"{ami_ihm_location}/{scenario}/audio/{scenario}.Headset-{int(headphone[2:])}.wav",
-                                 int(start)*10, int(end)*10, name, export_dir, text)
+    lst_record = ""
+    try:
+        lst_record = convert_to_flac(f"{ami_ihm_location}/{scenario}/audio/{scenario}.Headset-{int(headphone[2:])}.wav",
+                                    int(start)*10, int(end)*10, name, export_dir, text)
+    except:
+        print(f"Cannot convert file {name}")
     return lst_record
 
 
@@ -129,8 +133,12 @@ def ami_sdm_to_list(audio_path, ami_sdm_location, line):
     name, text = line
     _, scenario, _, _, start, end = name.split("_")
     export_dir = f"{audio_path}/sdm/{scenario}"
-    lst_record = convert_to_flac(f"{ami_sdm_location}/{scenario}/audio/{scenario}.Array1-01.wav",
-                                 int(start)*10, int(end)*10, name, export_dir, text)
+    lst_record = ""
+    try:
+        lst_record = convert_to_flac(f"{ami_sdm_location}/{scenario}/audio/{scenario}.Array1-01.wav",
+                                    int(start)*10, int(end)*10, name, export_dir, text)
+    except:
+        print(f"Cannot convert file {name}")
     return lst_record
 
 

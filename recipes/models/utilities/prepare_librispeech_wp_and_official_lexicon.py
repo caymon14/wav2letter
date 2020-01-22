@@ -45,11 +45,6 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    os.system(
-        "python3 {}../../../data/librispeech/prepare.py --dst {} -p {}".format(
-            os.path.dirname(os.path.abspath(__file__)), args.data_dst, args.process
-        )
-    )
 
     subpaths = {
         "train": ["train-clean-100", "train-clean-360", "train-other-500"],
@@ -108,7 +103,7 @@ if __name__ == "__main__":
                     fvocab_filt.write(val.replace("\u2581", "_") + "\n")
 
     # Generating decoder/*
-    lm = "4-gram"
+    lm = "3-gram.pruned.1e-7"
     print("Downloading Librispeech official LM model...\n", flush=True)
     arpa_file = os.path.join(decoder_path, lm + ".arpa")
     if not os.path.exists(arpa_file):

@@ -20,6 +20,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import argparse
 import os
 from multiprocessing import Pool
+import re
 
 import numpy
 from tqdm import tqdm
@@ -61,7 +62,7 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2:
+                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
                         print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
@@ -101,7 +102,7 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2:
+                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
                         print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
@@ -143,7 +144,7 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2:
+                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
                         print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
@@ -185,7 +186,7 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2:
+                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
                         print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
@@ -227,7 +228,7 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2:
+                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
                         print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)

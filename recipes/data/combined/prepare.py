@@ -50,7 +50,12 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
                     text_f.write(" ".join(line.strip().split(" ")[3:]) + "\n")
 
         else:
-            print(f"{dst_list} exists, skipping")
+            print(f"{dst_list} exists, doing verify")
+            with open(dst_list, "r") as list_f:
+                for line in list_f:
+                    filename = line.split(" ")[1]
+                    if not os.path.exists(filename):
+                        print(f"{filename} does not exists")
 
     print("Prepared CommonVoice", flush=True)
 
@@ -76,7 +81,13 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
                 for line in list_f:
                     text_f.write(" ".join(line.strip().split(" ")[3:]) + "\n")
         else:
-            print(f"{dst_list} exists, skipping")
+            print(f"{dst_list} exists, doing verify")
+            with open(dst_list, "r") as list_f:
+                for line in list_f:
+                    filename = line.split(" ")[1]
+                    if not os.path.exists(filename):
+                        print(f"{filename} does not exists")
+
 
     print("Prepared AMI IHM", flush=True)
 
@@ -103,7 +114,13 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
                     text_f.write(" ".join(line.strip().split(" ")[3:]) + "\n")
                     
         else:
-            print(f"{dst_list} exists, skipping")
+            print(f"{dst_list} exists, doing verify")
+            with open(dst_list, "r") as list_f:
+                for line in list_f:
+                    filename = line.split(" ")[1]
+                    if not os.path.exists(filename):
+                        print(f"{filename} does not exists")
+
 
     print("Prepared AMI SDM1", flush=True)
 
@@ -130,7 +147,13 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
                     text_f.write(" ".join(line.strip().split(" ")[3:]) + "\n")
 
         else:
-            print(f"{dst_list} exists, skipping")
+            print(f"{dst_list} exists, doing verify")
+            with open(dst_list, "r") as list_f:
+                for line in list_f:
+                    filename = line.split(" ")[1]
+                    if not os.path.exists(filename):
+                        print(f"{filename} does not exists")
+
 
     print("Prepared AMI MDM8", flush=True)
 
@@ -157,7 +180,13 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                     text_f.write(" ".join(line.strip().split(" ")[3:]) + "\n")
 
         else:
-            print(f"{dst_list} exists, skipping")
+            print(f"{dst_list} exists, doing verify")
+            with open(dst_list, "r") as list_f:
+                for line in list_f:
+                    filename = line.split(" ")[1]
+                    if not os.path.exists(filename):
+                        print(f"{filename} does not exists")
+
 
     print("Prepared TED-LIUM", flush=True)
 

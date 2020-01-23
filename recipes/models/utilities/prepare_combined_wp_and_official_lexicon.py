@@ -82,25 +82,26 @@ if __name__ == "__main__":
     lexicon_words = sorted(word_dict["train"] | word_dict["dev"])
 
     # train
-    print("Computing word pieces...\n", flush=True)
-    train_cmd = (
-        "--input={input} --model_prefix={prefix} --vocab_size={sz}"
-        " --character_coverage=1.0 --model_type=unigram"
-        " --split_by_unicode_script=false".format(
-            input=train_all_text, prefix=prefix, sz=num_wordpieces
+    if not os.path.exists(vocab_name):
+        print("Computing word pieces...\n", flush=True)
+        train_cmd = (
+            "--input={input} --model_prefix={prefix} --vocab_size={sz}"
+            " --character_coverage=1.0 --model_type=unigram"
+            " --split_by_unicode_script=false".format(
+                input=train_all_text, prefix=prefix, sz=num_wordpieces
+            )
         )
-    )
-    spm.SentencePieceTrainer.Train(train_cmd)
+        spm.SentencePieceTrainer.Train(train_cmd)
 
-    # word piece dictionary
-    print("Creating word piece list...\n", flush=True)
-    exclude_list = {"<unk>", "<s>", "</s>"}
-    with open(vocab_name.replace(".vocab", ".tokens"), "w") as fvocab_filt:
-        with open(vocab_name, "r", encoding="utf-8") as fvocab:
-            for line in fvocab:
-                val, _ = line.strip().split("\t", 1)
-                if val not in exclude_list:
-                    fvocab_filt.write(val.replace("\u2581", "_") + "\n")
+        # word piece dictionary
+        print("Creating word piece list...\n", flush=True)
+        exclude_list = {"<unk>", "<s>", "</s>"}
+        with open(vocab_name.replace(".vocab", ".tokens"), "w") as fvocab_filt:
+            with open(vocab_name, "r", encoding="utf-8") as fvocab:
+                for line in fvocab:
+                    val, _ = line.strip().split("\t", 1)
+                    if val not in exclude_list:
+                        fvocab_filt.write(val.replace("\u2581", "_") + "\n")
 
     # Generating decoder/*
     lm = "4-gram"

@@ -55,8 +55,9 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
             with open(dst_list, "r") as list_f:
                 for line in list_f:
                     filename = line.split(" ")[1]
-                    if not os.path.exists(filename):
-                        print(f"{filename} does not exists")
+                    text = " ".join(line.strip().split(" ")[3:])
+                    if not os.path.exists(filename) or len(text) < 2:
+                        print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
             with open(dst_list, "w") as list_f:
@@ -91,8 +92,9 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
             with open(dst_list, "r") as list_f:
                 for line in list_f:
                     filename = line.split(" ")[1]
-                    if not os.path.exists(filename):
-                        print(f"{filename} does not exists")
+                    text = " ".join(line.strip().split(" ")[3:])
+                    if not os.path.exists(filename) or len(text) < 2:
+                        print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
             with open(dst_list, "w") as list_f:
@@ -129,8 +131,9 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
             with open(dst_list, "r") as list_f:
                 for line in list_f:
                     filename = line.split(" ")[1]
-                    if not os.path.exists(filename):
-                        print(f"{filename} does not exists")
+                    text = " ".join(line.strip().split(" ")[3:])
+                    if not os.path.exists(filename) or len(text) < 2:
+                        print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
             with open(dst_list, "w") as list_f:
@@ -167,8 +170,9 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
             with open(dst_list, "r") as list_f:
                 for line in list_f:
                     filename = line.split(" ")[1]
-                    if not os.path.exists(filename):
-                        print(f"{filename} does not exists")
+                    text = " ".join(line.strip().split(" ")[3:])
+                    if not os.path.exists(filename) or len(text) < 2:
+                        print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
             with open(dst_list, "w") as list_f:
@@ -205,13 +209,13 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
             with open(dst_list, "r") as list_f:
                 for line in list_f:
                     filename = line.split(" ")[1]
-                    if not os.path.exists(filename):
-                        print(f"{filename} does not exists")
+                    text = " ".join(line.strip().split(" ")[3:])
+                    if not os.path.exists(filename) or len(text) < 2:
+                        print(f"{filename} does not exists or text is empty")
                     else:
                         new_list.append(line)
             with open(dst_list, "w") as list_f:
                 list_f.writelines(new_list)
-
     print("Prepared TED-LIUM", flush=True)
 
 

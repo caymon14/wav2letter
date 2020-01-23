@@ -23,10 +23,12 @@ from multiprocessing import Pool
 
 import numpy
 from tqdm import tqdm
-from utils import find_transcript_files, transcript_to_list, read_txt, read_tsv, commonvoice_to_list, ami_sdm_to_list, ami_ihm_to_list, ami_mdm_to_list, ted_to_list
+from utils import find_transcript_files, transcript_to_list, read_txt, read_tsv, commonvoice_to_list, ami_sdm_to_list, ami_ihm_to_list, ami_mdm_to_list, ted_to_list, remove_punct
 from functools import partial
 
 LOG_STR = " To regenerate this file, please, remove it."
+
+
 
 def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
@@ -56,6 +58,9 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
+                    params = " ".join(line.strip().split(" ")[:3])
+                    text = remove_punct(text)
+                    line = f"{params} {text}"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -93,6 +98,9 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
+                    params = " ".join(line.strip().split(" ")[:3])
+                    text = remove_punct(text)
+                    line = f"{params} {text}"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -132,6 +140,9 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
+                    params = " ".join(line.strip().split(" ")[:3])
+                    text = remove_punct(text)
+                    line = f"{params} {text}"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -171,6 +182,9 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
+                    params = " ".join(line.strip().split(" ")[:3])
+                    text = remove_punct(text)
+                    line = f"{params} {text}"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -210,10 +224,13 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
+                    params = " ".join(line.strip().split(" ")[:3])
+                    text = remove_punct(text)
+                    line = f"{params} {text}"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
-                        new_list.append(line.replace("<unk>", ""))
+                        new_list.append(line)
             with open(dst_list, "w") as list_f:
                 list_f.writelines(new_list)
     print("Prepared TED-LIUM", flush=True)

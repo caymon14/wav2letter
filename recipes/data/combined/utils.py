@@ -158,3 +158,21 @@ def ted_to_list(audio_path, f, ted_location, line):
     lst_record = convert_to_flac(f"{ted_location}/legacy/{f}/sph/{scenario}.sph",
                                  int(start)*10, int(end)*10, name, export_dir, text)
     return lst_record
+
+def remove_punct(text):
+    text = text.replace("<unk>", "")
+    text = text.replace("\"", "")
+    text = text.replace("!", "")
+    text = text.replace("?", "")
+    text = text.replace(".", "")
+    text = text.replace(",", "")
+    text = text.replace("’", "")
+    text = text.replace("‘", "")
+    text = text.replace("<", "")
+    text = text.replace(">", "")
+    text = text.replace("[", "")
+    text = text.replace("]", "")
+    text = text.replace("(", "")
+    text = text.replace(")", "")
+    text = text.replace("-", " ")
+    return text

@@ -210,11 +210,10 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                 for line in list_f:
                     filename = line.split(" ")[1]
                     text = " ".join(line.strip().split(" ")[3:])
-                    text = text.replace("<unk>", "")
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
-                        new_list.append(line)
+                        new_list.append(line.replace("<unk>", ""))
             with open(dst_list, "w") as list_f:
                 list_f.writelines(new_list)
     print("Prepared TED-LIUM", flush=True)

@@ -29,7 +29,7 @@ from functools import partial
 
 LOG_STR = " To regenerate this file, please, remove it."
 
-
+alpha = re.compile(r"^[a-zA-Z\s]+$") 
 
 def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
@@ -62,7 +62,7 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
+                    if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
                         print(f"{filename} does not exists or text is empty, text: {text}")
                     else:
                         new_list.append(line)
@@ -102,7 +102,7 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
+                    if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
                         print(f"{filename} does not exists or text is empty, text: {text}")
                     else:
                         new_list.append(line)
@@ -144,7 +144,7 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
+                    if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
                         print(f"{filename} does not exists or text is empty, text: {text}")
                     else:
                         new_list.append(line)
@@ -186,7 +186,7 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
+                    if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
                         print(f"{filename} does not exists or text is empty, text: {text}")
                     else:
                         new_list.append(line)
@@ -228,7 +228,7 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
                     line = f"{params} {text}\n"
-                    if not os.path.exists(filename) or len(text) < 2 or not text.isalpha():
+                    if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
                         print(f"{filename} does not exists or text is empty, text: {text}")
                     else:
                         new_list.append(line)

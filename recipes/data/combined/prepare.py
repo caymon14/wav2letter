@@ -60,7 +60,7 @@ def prepare_commonvoice(commonvoice_location, audio_path, text_path, lists_path,
                     text = " ".join(line.strip().split(" ")[3:])
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
-                    line = f"{params} {text}"
+                    line = f"{params} {text}\n"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -100,7 +100,7 @@ def prepare_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, process
                     text = " ".join(line.strip().split(" ")[3:])
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
-                    line = f"{params} {text}"
+                    line = f"{params} {text}\n"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -142,7 +142,7 @@ def prepare_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, process
                     text = " ".join(line.strip().split(" ")[3:])
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
-                    line = f"{params} {text}"
+                    line = f"{params} {text}\n"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -184,7 +184,7 @@ def prepare_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, process
                     text = " ".join(line.strip().split(" ")[3:])
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
-                    line = f"{params} {text}"
+                    line = f"{params} {text}\n"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:
@@ -226,7 +226,7 @@ def prepare_ted(ted_location, audio_path, text_path, lists_path, processes):
                     text = " ".join(line.strip().split(" ")[3:])
                     params = " ".join(line.strip().split(" ")[:3])
                     text = remove_punct(text)
-                    line = f"{params} {text}"
+                    line = f"{params} {text}\n"
                     if not os.path.exists(filename) or len(text) < 2:
                         print(f"{filename} does not exists or text is empty")
                     else:

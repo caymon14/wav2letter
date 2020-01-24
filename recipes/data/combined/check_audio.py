@@ -126,7 +126,7 @@ if __name__ == "__main__":
     os.makedirs(text_path, exist_ok=True)
     os.makedirs(lists_path, exist_ok=True)
 
-    check_ted(args.ted, audio_path, text_path, lists_path, args.process)
+    check_ted(audio_path, text_path, lists_path, args.process)
 
     check_ami_sdm(audio_path,
                   text_path, lists_path, args.process)

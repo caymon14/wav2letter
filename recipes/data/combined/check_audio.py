@@ -34,7 +34,7 @@ def check_commonvoice(audio_path, text_path, lists_path, processes):
     print("Checked CommonVoice", flush=True)
 
 
-def check_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, processes):
+def check_ami_ihm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-ihm-{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -48,7 +48,7 @@ def check_ami_ihm(ami_ihm_location, audio_path, text_path, lists_path, processes
     print("Prepared AMI IHM", flush=True)
 
 
-def check_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, processes):
+def check_ami_sdm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-sdm-{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -62,7 +62,7 @@ def check_ami_sdm(ami_sdm_location, audio_path, text_path, lists_path, processes
     print("Checked AMI SDM1", flush=True)
 
 
-def check_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, processes):
+def check_ami_mdm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-mdm-{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -75,7 +75,7 @@ def check_ami_mdm(ami_mdm_location, audio_path, text_path, lists_path, processes
     print("Checked AMI MDM8", flush=True)
 
 
-def check_ted(ted_location, audio_path, text_path, lists_path, processes):
+def check_ted(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ted-{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -88,7 +88,7 @@ def check_ted(ted_location, audio_path, text_path, lists_path, processes):
     print("Checked TED-LIUM", flush=True)
 
 
-def check_libri(libri_location, audio_path, text_path, lists_path, processes):
+def check_libri(audio_path, text_path, lists_path, processes):
     for f in ['train-clean-100', 'train-clean-360', 'train-other-500', 'dev-clean', 'dev-other', 'test-clean', 'test-other']:
         dst_list = os.path.join(lists_path, f"ami-mdm-{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -128,12 +128,12 @@ if __name__ == "__main__":
 
     check_ted(args.ted, audio_path, text_path, lists_path, args.process)
 
-    check_ami_sdm(args.ami_sdm, audio_path,
+    check_ami_sdm(audio_path,
                   text_path, lists_path, args.process)
-    check_ami_ihm(args.ami_ihm, audio_path,
+    check_ami_ihm(audio_path,
                   text_path, lists_path, args.process)
-    check_ami_mdm(args.ami_mdm, audio_path,
+    check_ami_mdm(audio_path,
                   text_path, lists_path, args.process)
-    check_commonvoice(args.commonvoice, audio_path,
+    check_commonvoice(audio_path,
                       text_path, lists_path, args.process)
-    check_libri(args.libri, audio_path, text_path, lists_path, args.process)
+    check_libri(audio_path, text_path, lists_path, args.process)

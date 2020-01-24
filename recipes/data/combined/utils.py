@@ -187,3 +187,7 @@ def remove_punct(text):
     text = text.replace("'", "")
 
     return text
+
+def check_file(filename):
+    segment = AudioSegment.from_file(filename)
+    return segment.duration_seconds > 0

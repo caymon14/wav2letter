@@ -25,10 +25,11 @@ def check_commonvoice(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"commonvoice-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
 
     print("Checked CommonVoice", flush=True)
@@ -38,12 +39,12 @@ def check_ami_ihm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-ihm-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
-
 
     print("Prepared AMI IHM", flush=True)
 
@@ -52,10 +53,11 @@ def check_ami_sdm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-sdm-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
 
 
@@ -66,10 +68,11 @@ def check_ami_mdm(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ami-mdm-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
 
     print("Checked AMI MDM8", flush=True)
@@ -79,10 +82,11 @@ def check_ted(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
         dst_list = os.path.join(lists_path, f"ted-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
 
     print("Checked TED-LIUM", flush=True)
@@ -92,10 +96,11 @@ def check_libri(audio_path, text_path, lists_path, processes):
     for f in ['train-clean-100', 'train-clean-360', 'train-other-500', 'dev-clean', 'dev-other', 'test-clean', 'test-other']:
         dst_list = os.path.join(lists_path, f"ami-mdm-{f}.lst")
         with open(dst_list, "r") as list_f:
+            data = list(list_f)
             with Pool(processes) as p:
                 tqdm(
-                    p.imap(checkfile, list_f),
-                    total=len(list_f),
+                    p.imap(checkfile, data),
+                    total=len(data),
                 )
 
     print("Checked LibriSpeech", flush=True)

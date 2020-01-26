@@ -12,6 +12,7 @@ import os
 
 import sox
 from pydub import AudioSegment
+from pydub.effects import normalize
 import csv
 
 
@@ -190,6 +191,10 @@ def remove_punct(text):
 
     return text
 
-def check_file(filename):
+def normalize(filename):
     segment = AudioSegment.from_file(filename)
+    segment = segment.set_channels(1)
+    segment = normalize(segment, headroom=0.5)
+    segment.export(filename, format="flac")
+
     return segment.duration_seconds > 0

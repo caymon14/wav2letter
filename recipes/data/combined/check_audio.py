@@ -15,7 +15,7 @@ LOG_STR = " To regenerate this file, please, remove it."
 alpha = re.compile(r"^[a-zA-Z\s]+$")
 
 
-def checkfile(line):
+def normalize(line):
     filename = line.split(" ")[1]
     if not check_file(filename):
         print(f"{filename} is corrupt!")
@@ -104,6 +104,20 @@ def check_libri(audio_path, text_path, lists_path, processes):
                 ))
 
     print("Checked LibriSpeech", flush=True)
+
+
+def check_libri(audio_path, text_path, lists_path, processes):
+    for f in ['callhome-train', 'callhome-test']:
+        dst_list = os.path.join(lists_path, f"{f}.lst")
+        with open(dst_list, "r") as list_f:
+            with Pool(processes) as p:
+                data = list(list_f)
+                _ = list(tqdm(
+                    p.imap(checkfile, data),
+                    total=len(data),
+                ))
+
+    print("Checked CallHome", flush=True)
 
 
 if __name__ == "__main__":

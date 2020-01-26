@@ -191,10 +191,15 @@ def remove_punct(text):
 
     return text
 
-def normalize(filename):
+def match_target_amplitude(sound, target_dBFS):
+    change_in_dBFS = target_dBFS - sound.dBFS
+    return sound.apply_gain(change_in_dBFS)
+
+
+def norm(filename):
     segment = AudioSegment.from_file(filename)
     segment = segment.set_channels(1)
-    segment = normalize(segment, headroom=0.5)
+    segment = match_target_amplitude(segment, -10.0)
     segment.export(filename, format="flac")
 
     return segment.duration_seconds > 0

@@ -7,19 +7,17 @@ import re
 
 import numpy
 from tqdm import tqdm
-from utils import normalize
+from utils import norm
 from functools import partial
 
 LOG_STR = " To regenerate this file, please, remove it."
 
 alpha = re.compile(r"^[a-zA-Z\s]+$")
 
-
-def normalize(line):
+def checkfile(line):
     filename = line.split(" ")[1]
-    if not check_file(filename):
+    if not norm(filename):
         print(f"{filename} is corrupt!")
-
 
 def check_commonvoice(audio_path, text_path, lists_path, processes):
     for f in ['dev', 'test', 'train']:
@@ -106,7 +104,7 @@ def check_libri(audio_path, text_path, lists_path, processes):
     print("Checked LibriSpeech", flush=True)
 
 
-def check_libri(audio_path, text_path, lists_path, processes):
+def check_callhome(audio_path, text_path, lists_path, processes):
     for f in ['callhome-train', 'callhome-test']:
         dst_list = os.path.join(lists_path, f"{f}.lst")
         with open(dst_list, "r") as list_f:
@@ -145,6 +143,7 @@ if __name__ == "__main__":
     os.makedirs(text_path, exist_ok=True)
     os.makedirs(lists_path, exist_ok=True)
 
+    check_callhome(audio_path, text_path, lists_path, args.process)
     check_ted(audio_path, text_path, lists_path, args.process)
 
     check_ami_sdm(audio_path,

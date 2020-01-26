@@ -100,14 +100,20 @@ def prepare_callhome(callhome, audio_path, text_path, lists_path, processes):
                             writes += 1
     else:
         print(f"{train_file} exists, doing verify")
+        new_list = []
         with open(train_file, "r") as list_f:
             for line in list_f:
                 filename = line.split(" ")[1]
                 text = " ".join(line.strip().split(" ")[3:])
+                text = re.sub(' +', ' ', text)
                 params = " ".join(line.strip().split(" ")[:3])
-                text = remove_punct(text)
-                if not alpha.match(text):
-                    print(f"{filename}: {text}")
+                line = f"{params} {text}\n"
+                if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
+                    print(f"{filename} does not exists or text is empty, text: {text}")
+                else:
+                    new_list.append(line)
+        with open(train_file, "w") as list_f:
+            list_f.writelines(new_list)
     
     print("Prepared CallHome", flush=True)
 

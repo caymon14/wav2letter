@@ -47,9 +47,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     subpaths = {
-        "train": ["train-clean-100", "train-clean-360", "train-other-500", "ami-sdm-train", "ami-mdm-train", "ami-ihm-train", "ted-train", "commonvoice-train"],
-        "dev": ["dev-clean", "dev-other", "ami-sdm-dev", "ami-mdm-dev", "ami-ihm-dev", "ted-dev", "commonvoice-dev"],
-        "test": ["test-clean", "test-other", "ami-sdm-test", "ami-mdm-dev", "ami-ihm-test", "ted-test", "commonvoice-test"],
+        "train": ["train-clean-100", "train-clean-360", "train-other-500", "ami-sdm-train", "ami-mdm-train", "ami-ihm-train", "ted-train", "commonvoice-train", "callhome-train", "dev-clean", "dev-other", "ami-sdm-dev", "ami-mdm-dev", "ami-ihm-dev", "ted-dev", "commonvoice-dev"],
+        "dev": ["test-clean", "test-other", "ami-sdm-test", "ami-mdm-test", "ami-ihm-test", "ted-test", "commonvoice-test", "callhome-test"],
     }
 
     lists_path = os.path.join(args.data_dst, "lists")

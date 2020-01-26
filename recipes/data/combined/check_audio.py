@@ -7,7 +7,7 @@ import re
 
 import numpy
 from tqdm import tqdm
-from utils import find_transcript_files, transcript_to_list, read_txt, read_tsv, commonvoice_to_list, ami_sdm_to_list, ami_ihm_to_list, ami_mdm_to_list, ted_to_list, remove_punct, check_file
+from utils import normalize
 from functools import partial
 
 LOG_STR = " To regenerate this file, please, remove it."

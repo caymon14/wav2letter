@@ -10,7 +10,7 @@
 
 FROM wav2letter/wav2letter:inference-base-latest
 
-#Copy wav2letter src directory from host.
+# Copy wav2letter src directory from host.
 RUN mkdir /root/wav2letter
 COPY . /root/wav2letter
 

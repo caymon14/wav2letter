@@ -212,6 +212,7 @@ DECLARE_bool(show);
 DECLARE_bool(showletters);
 DECLARE_bool(logadd);
 DECLARE_bool(uselexicon);
+DECLARE_bool(isbeamdump);
 
 DECLARE_string(smearing);
 DECLARE_string(lmtype);
@@ -234,8 +235,11 @@ DECLARE_int32(maxload);
 DECLARE_int32(maxword);
 DECLARE_int32(beamsize);
 DECLARE_int32(beamsizetoken);
+DECLARE_int32(nthread_decoder_am_forward);
 DECLARE_int32(nthread_decoder);
 DECLARE_int32(lm_memory);
+
+DECLARE_int32(emission_queue_size);
 
 // Seq2Seq
 DECLARE_double(smoothingtemperature);

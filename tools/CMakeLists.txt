@@ -42,3 +42,27 @@ target_link_libraries(
     streaming_inference_decoder
     streaming_inference_modules
 )
+
+# ---------------------- saug add tool ----------------------
+
+add_executable(
+  add_saug
+  ${CMAKE_CURRENT_LIST_DIR}/AddSAUG.cpp
+)
+
+target_include_directories(
+  add_saug
+  PRIVATE
+    ${GFLAGS_INCLUDE_DIRS}
+)
+
+target_link_libraries(
+  add_saug
+  PRIVATE
+    common
+    criterion
+    module
+    runtime
+    ${GFLAGS_LIBRARIES}
+)
+

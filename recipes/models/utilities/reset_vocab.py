@@ -63,13 +63,13 @@ if __name__ == "__main__":
 
     vocab = []
     with open(args.tokens_file, "r") as f:
-        for i, line in enumerate(f):
-            score = i/1000
-            line = line.replace("_", "\u2581")
+        for line in enumeratef:
+            line = line.replace("_", "\u2581").replace("\n", "")
             vocab.append(line)
 
     with open(f"{args.output_folder}/vocab.lst", "w") as f:
-        for w in vocab:
+        for i, w in vocab:
+            score = i/1000
             f.write(f"{w}\t-{score}\n")
 
     sp.SetVocabulary(vocab)

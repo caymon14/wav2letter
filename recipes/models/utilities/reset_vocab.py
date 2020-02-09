@@ -1,4 +1,4 @@
- 
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import argparse
@@ -8,8 +8,9 @@ from collections import defaultdict
 
 import sentencepiece as spm
 
- if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Librispeech Dataset creation.")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Librispeech Dataset creation.")
     parser.add_argument(
         "--model_file", help="data destination directory", default="./data_dir"
     )
@@ -26,7 +27,6 @@ import sentencepiece as spm
         default="./model",
     )
 
-
     args = parser.parse_args()
     sp = spm.SentencePieceProcessor()
     sp.Load(args.model_name)
@@ -37,10 +37,10 @@ import sentencepiece as spm
             score = i/1000
             line = line..replace("_", "\u2581")
             vocab.append(f"{line}\t-{score}\n")
-    
+
     with open(f"{args.output_folder}/vocab.lst", "w") as f:
         f.writelines(vocab)
-    
+
     sp.SetVocabulary(vocab)
 
     am_path = args.output_folder

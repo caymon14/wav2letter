@@ -66,10 +66,11 @@ if __name__ == "__main__":
         for i, line in enumerate(f):
             score = i/1000
             line = line.replace("_", "\u2581")
-            vocab.append(f"{line}\t-{score}\n")
+            vocab.append(line)
 
     with open(f"{args.output_folder}/vocab.lst", "w") as f:
-        f.writelines(vocab)
+        for w in vocab:
+            f.write(f"{w}\t-{score}\n")
 
     sp.SetVocabulary(vocab)
 

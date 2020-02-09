@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     vocab = []
     with open(args.tokens_file, "r") as f:
-        for line in enumeratef:
+        for line in enumerate(w):
             line = line.replace("_", "\u2581").replace("\n", "")
             vocab.append(line)
 

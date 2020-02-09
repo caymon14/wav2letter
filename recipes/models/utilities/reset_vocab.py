@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     sp = spm.SentencePieceProcessor()
-    sp.Load(args.model_name)
+    sp.Load(args.model_file)
 
     vocab = []
     with open(args.tokens_file, "r") as f:

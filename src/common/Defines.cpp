@@ -86,7 +86,7 @@ DEFINE_double(adambeta1, 0.9, "beta1 in the Adam optimizer");
 DEFINE_double(adambeta2, 0.999, "beta2 in the Adam optimizer");
 DEFINE_double(optimrho, 0.9, "rho in the optimizer");
 DEFINE_double(optimepsilon, 1e-8, "epsilon in the optimizer");
-DEFINE_int64(gradacuum, 1, "for how many steps accumulate gradient before update");
+DEFINE_int64(gradaccum, 1, "for how many steps accumulate gradient before update");
 
 // LR-SCHEDULER OPTIONS
 DEFINE_int64(

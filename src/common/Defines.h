@@ -157,6 +157,7 @@ DECLARE_double(adambeta1); // TODO rename into optim beta1
 DECLARE_double(adambeta2); // TODO rename into optim beta2
 DECLARE_double(optimrho);
 DECLARE_double(optimepsilon);
+DECLARE_int64(gradaccum);
 
 /* ========== LR-SCHEDULER OPTIONS ========== */
 

@@ -510,6 +510,7 @@ int main(int argc, char** argv) {
 
     int64_t curEpoch = startEpoch;
     int64_t sampleIdx = 0;
+    int64_t gradAcum = 0;
     while (curEpoch < nepochs) {
       double lrScale = 1;
       if (FLAGS_lrcosine) {
@@ -571,11 +572,15 @@ int main(int argc, char** argv) {
         if (trainEvalIds.find(globalBatchIdx) != trainEvalIds.end()) {
           evalOutput(output.array(), sample[kTargetIdx], meters.train);
         }
-
         // backward
         meters.bwdtimer.resume();
-        netopt->zeroGrad();
-        critopt->zeroGrad();
+        ++gradAcum;
+
+        if (gradAcum % FLAGS_gradaccum == 0){
+          netopt->zeroGrad();
+          critopt->zeroGrad();
+        }
+
         loss.backward();
         if (reducer) {
           reducer->finalize();

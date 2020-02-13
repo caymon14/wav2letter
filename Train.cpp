@@ -283,6 +283,8 @@ int main(int argc, char** argv) {
                      << " epochs)";
   }
 
+  LOG(INFO) << "Gradient Accumulation: " << FLAGS_gradaccum;
+
   /* ===================== Meters ===================== */
   TrainMeters meters;
   for (const auto& s : validTagSets) {

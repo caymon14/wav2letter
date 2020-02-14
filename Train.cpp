@@ -599,6 +599,7 @@ int main(int argc, char** argv) {
             continue;
           }
           p.grad() = p.grad() / FLAGS_batchsize;
+          af::print("Grad", p.grad().array());
         }
         for (const auto& p : crit->params()) {
           if (!p.isGradAvailable()) {

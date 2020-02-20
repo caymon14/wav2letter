@@ -577,7 +577,10 @@ int main(int argc, char** argv) {
         // backward
         meters.bwdtimer.resume();
         ++gradAcum;
-
+        if (gradAcum % FLAGS_gradaccum == 0){
+          netopt->zeroGrad();
+          critopt->zeroGrad();
+        }
         loss.backward();
         if (reducer) {
           reducer->finalize();
@@ -588,38 +591,33 @@ int main(int argc, char** argv) {
         // optimizer
         meters.optimtimer.resume();
 
-        if (gradAcum % FLAGS_gradaccum == 0){
-          // scale down gradients by batchsize
-          for (const auto& p : ntwrk->params()) {
-            if (!p.isGradAvailable()) {
-              continue;
-            }
-            p.grad() = p.grad() / (FLAGS_batchsize);
+        // scale down gradients by batchsize
+        for (const auto& p : ntwrk->params()) {
+          if (!p.isGradAvailable()) {
+            continue;
           }
-          for (const auto& p : crit->params()) {
-            if (!p.isGradAvailable()) {
-              continue;
-            }
-            p.grad() = p.grad() / (FLAGS_batchsize);
-          }
-
-          // clamp gradients
-          if (FLAGS_maxgradnorm > 0) {
-            auto params = ntwrk->params();
-            if (clampCrit) {
-              auto critparams = crit->params();
-              params.insert(params.end(), critparams.begin(), critparams.end());
-            }
-            fl::clipGradNorm(params, FLAGS_maxgradnorm);
-          }
-
-          // update weights
-          critopt->step();
-          netopt->step();
-
-          netopt->zeroGrad();
-          critopt->zeroGrad();
+          p.grad() = p.grad() / FLAGS_batchsize;
         }
+        for (const auto& p : crit->params()) {
+          if (!p.isGradAvailable()) {
+            continue;
+          }
+          p.grad() = p.grad() / FLAGS_batchsize;
+        }
+
+        // clamp gradients
+        if (FLAGS_maxgradnorm > 0) {
+          auto params = ntwrk->params();
+          if (clampCrit) {
+            auto critparams = crit->params();
+            params.insert(params.end(), critparams.begin(), critparams.end());
+          }
+          fl::clipGradNorm(params, FLAGS_maxgradnorm);
+        }
+
+        // update weights
+        critopt->step();
+        netopt->step();
 
         af::sync();
         meters.optimtimer.stopAndIncUnit();

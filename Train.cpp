@@ -594,13 +594,13 @@ int main(int argc, char** argv) {
             if (!p.isGradAvailable()) {
               continue;
             }
-            p.grad() = p.grad() / (FLAGS_batchsize * FLAGS_gradaccum);
+            p.grad() = p.grad() / (FLAGS_batchsize);
           }
           for (const auto& p : crit->params()) {
             if (!p.isGradAvailable()) {
               continue;
             }
-            p.grad() = p.grad() / (FLAGS_batchsize * FLAGS_gradaccum);
+            p.grad() = p.grad() / (FLAGS_batchsize);
           }
 
           // clamp gradients

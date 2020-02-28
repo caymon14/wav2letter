@@ -24,9 +24,7 @@ target_link_libraries(
 # ------------------------- CUDA-specific -------------------------
 
 if (W2L_LIBRARIES_USE_CUDA)
-  if (NOT CUB_INCLUDE_DIRS)
-    include(${CMAKE_MODULE_PATH}/BuildCUB.cmake)
-  endif ()
+  include(${CMAKE_MODULE_PATH}/BuildCUB.cmake)
   include(${CMAKE_MODULE_PATH}/CUDAUtils.cmake)
 
   set_cuda_cxx_compile_flags()

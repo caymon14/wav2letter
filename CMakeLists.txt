@@ -22,6 +22,7 @@ option(W2L_BUILD_EXPERIMENTAL "Build internal experimental components for wav2le
 option(W2L_BUILD_SCRIPTS "Build internal scripts for wav2letter++" OFF)
 option(W2L_BUILD_RECIPES "Build recipes" ON)
 option(W2L_BUILD_TOOLS "Build audio tools" OFF)
+option(W2L_BUILD_BIN "Build binaries" ON)
 set(KENLM_MAX_ORDER 6 CACHE STRING "Maximum ngram order for KenLM")
 
 # ------------------------- Dependency Fallback -------------------------
@@ -221,35 +222,38 @@ if (W2L_BUILD_TOOLS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/tools)
 endif ()
 
-# ----------------------------- Train -----------------------------
-add_executable(
-  Train
-  Train.cpp
-)
+if (W2L_BUILD_BIN)
 
-target_link_libraries(
-  Train
-  wav2letter++
+  # ----------------------------- Train -----------------------------
+  add_executable(
+    Train
+    Train.cpp
   )
 
-# ----------------------------- Test -----------------------------
-add_executable(
-  Test
-  Test.cpp
-  )
+  target_link_libraries(
+    Train
+    wav2letter++
+    )
 
-target_link_libraries(
-  Test
-  wav2letter++
-  )
+  # ----------------------------- Test -----------------------------
+  add_executable(
+    Test
+    Test.cpp
+    )
 
-# ----------------------------- Decoder -----------------------------
-add_executable(
-  Decoder
-  Decode.cpp
-  )
+  target_link_libraries(
+    Test
+    wav2letter++
+    )
 
-target_link_libraries(
-  Decoder
-  wav2letter++
-  )
+  # ----------------------------- Decoder -----------------------------
+  add_executable(
+    Decoder
+    Decode.cpp
+    )
+
+  target_link_libraries(
+    Decoder
+    wav2letter++
+    )
+endif ()

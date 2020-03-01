@@ -14,7 +14,6 @@ target_sources(streaming_inference_modules
 )
 
 add_dependencies(streaming_inference_modules streaming_inference_modules_nn)
-add_dependencies(streaming_inference_modules cereal)
 
 target_link_libraries(
     streaming_inference_modules

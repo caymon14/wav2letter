@@ -9,7 +9,6 @@ add_library(util_example
   ${CMAKE_CURRENT_LIST_DIR}/Util.cpp
 )
 
-add_dependencies(util_example cereal)
 add_dependencies(util_example streaming_inference_common)
 
 find_package(Threads REQUIRED)

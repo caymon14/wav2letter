@@ -15,8 +15,6 @@ set_target_properties(
     CXX_STANDARD 11
 )
 
-add_dependencies(streaming_inference_modules_nn_backend cereal)
-
 target_link_libraries(streaming_inference_modules_nn_backend
   PUBLIC
     streaming_inference_modules

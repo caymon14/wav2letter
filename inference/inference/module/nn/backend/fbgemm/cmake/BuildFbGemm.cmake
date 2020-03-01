@@ -9,20 +9,28 @@ set(fbgemm_TAG b35b183e45a8b9af50efe29c7fd1b2460ad16182)
 
 # Download fbgemm
 if (NOT TARGET fbgemm)
-  message("ExternalProject_Add(fbgemm) downloading ...")
-  ExternalProject_Add(
-      fbgemm
-      PREFIX fbgemm
-      GIT_REPOSITORY ${fbgemm_URL}
-      GIT_TAG ${fbgemm_TAG}
-      GIT_SUBMODULES
-      BUILD_IN_SOURCE 1
-      BUILD_COMMAND ${CMAKE_COMMAND} --build . --config Release
-      INSTALL_COMMAND ""
-      CMAKE_CACHE_ARGS
-          -DFBGEMM_BUILD_BENCHMARKS:BOOL=OFF
-          -DFBGEMM_BUILD_TESTS:BOOL=OFF
-  )
+  if (FBGEMM_ROOT_DIR)
+    find_package(fbgemm)
+    if (fbgemm_FOUND)
+      message(STATUS "fbgemm found (include: ${fbgemm_INCLUDE_DIRS}, library: ${fbgemm_LIBRARIES})")
+    else()
+      message(FATAL_ERROR "fbgemm not found")
+    endif()
+  else()
+    message("ExternalProject_Add(fbgemm) downloading ...")
+    ExternalProject_Add(
+        fbgemm
+        PREFIX fbgemm
+        GIT_REPOSITORY ${fbgemm_URL}
+        GIT_TAG ${fbgemm_TAG}
+        GIT_SUBMODULES
+        BUILD_IN_SOURCE 1
+        BUILD_COMMAND ${CMAKE_COMMAND} --build . --config Release
+        INSTALL_COMMAND ""
+        CMAKE_CACHE_ARGS
+            -DFBGEMM_BUILD_BENCHMARKS:BOOL=OFF
+            -DFBGEMM_BUILD_TESTS:BOOL=OFF
+    )
 endif()
 
 ExternalProject_Get_Property(fbgemm source_dir)

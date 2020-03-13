@@ -11,6 +11,7 @@ from utils import remove_punct, convert_to_flac
 from functools import partial
 from glob import glob
 from pydub import AudioSegment
+import subprocess
 
 alpha = re.compile(r"^[a-zA-Z\s]+$") 
 max_duration = 10 * 1000
@@ -29,21 +30,31 @@ def read_dialogs(lines):
             text = chunks[3:]
             start_seconds = float(chunks[0]) * 1000
             end_seconds = float(chunks[1]) * 1000
+            channel = 1
+            if chunks[2] == "B:":
+                channel = 2
             start = float(start_seconds)
             end = float(end_seconds)
-            dialogs.append((text, start, end))
+            dialogs.append((text, start, end, channel))
 
     return dialogs
 
-def fisher_to_list(audio_path, fisher_path, txt_file):
+def fisher_to_list(audio_path, fisher_path, txt_file, sph2pipe):
     with open(txt_file, "r") as f:
         dialogs = read_dialogs(f.readlines())
         scenario = os.path.dirname(txt_file).split("/")[-1]
         name = os.path.basename(txt_file).split(".")[0]
         export_dir = f"{audio_path}/fisher/{scenario}"
+        sph_file = f"{fisher_path}/audio/{scenario}/{name}.sph"
+        for channel in ["1", "2"]:
+            wav_filename = f"{name}_c{channel}.wav"
+            wav_file = os.path.join(os.path.dirname(txt_file), wav_filename)
+            print("converting {} to {}".format(sph_file, wav_file))
+            subprocess.check_call([sph2pipe, "-c", channel, "-p", "-f", "rif", sph_file, wav_file])
+
         lists = []
-        for text, start, end in dialogs:
-            lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}.sph",
+        for text, start, end, channel in dialogs:
+            lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
                                         start, end, name, export_dir, text)
             lists.append(lst_record)
         return lists

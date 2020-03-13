@@ -39,7 +39,7 @@ def read_dialogs(lines):
 
     return dialogs
 
-def fisher_to_list(audio_path, fisher_path, txt_file, sph2pipe):
+def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
     with open(txt_file, "r") as f:
         dialogs = read_dialogs(f.readlines())
         scenario = os.path.dirname(txt_file).split("/")[-1]
@@ -66,7 +66,7 @@ def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pip
     if not os.path.exists(train_file):
         with Pool(processes) as p:
             files = list(glob(f"{fisher}/trans/**/*.txt"))
-            to_list = partial(fisher_to_list, audio_path, fisher)
+            to_list = partial(fisher_to_list, audio_path, fisher, sph2pipe)
             samples = list(
                 tqdm(
                     p.imap(to_list, files),

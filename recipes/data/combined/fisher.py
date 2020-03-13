@@ -36,42 +36,41 @@ def read_dialogs(lines):
     return dialogs
             
 
-def prepare_fisher(fisher, audio_path, text_path, lists_path, processes):
+def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
     train_file = f"{lists_path}/fisher-train.lst"
     test_file = f"{lists_path}/fisher-test.lst"
     if not os.path.exists(train_file) or not os.path.exists(test_file):
         with open(train_file, "w") as lst, open(test_file, "w") as lst_test:
             for file in glob(f"{fisher}/*.txt"):
-                mp3_name = os.path.basename(file).split(".")[0]
-                original_audio = AudioSegment.from_file(f"{fisher}/{mp3_name}.mp3")
-                original_audio = original_audio.set_sample_width(2)
-                original_audio = original_audio.set_frame_rate(16000)
-                original_audio = original_audio.set_channels(1)
-                accum_duration = 0
-                current_pointer = 0
-                accum_text = []
-                with open(file, "r") as f:
-                    dialogs = read_dialogs(f.readlines())
-                    writes = 0
-                    for text, start, end in dialogs:
-                        if current_pointer == 0:
-                            current_pointer = start
-                        
-                        accum_duration = end - current_pointer
-                        accum_text.append(text.strip())
-                        if accum_duration >= max_duration:
-                            filename = f"{mp3_name}_{end-accum_duration}_{end}.flac"
-                            filepath = f"{audio_path}/fisher/{filename}"
-                            final_text = cure_text(" ".join(accum_text)).strip()
-                            if writes == 5:
-                                lst_test.write(f"{filename} {filepath} {accum_duration}.0 {final_text}\n")
-                            else:
-                                lst.write(f"{filename} {filepath} {accum_duration}.0 {final_text}\n")
-                            save_segment = original_audio[current_pointer:end]
-                            save_segment.export(filepath, format="flac")
-                            accum_text = []
-                            current_pointer = end
-                            writes += 1
+                with Pool(args.process) as p:
+                    samples_info = list(
+                        tqdm(
+                            p.imap(
+                                convert_to_flac,
+                                zip(
+                                    samples,
+                                    numpy.arange(n_samples),
+                                    [data_dst] * n_samples,
+                                    [args.sph2pipe] * n_samples,
+                                ),
+                            ),
+                            total=n_samples,
+                        )
+                    )
+                    list_dst = os.path.join(lists_path, set_name + ".lst")
+                    if not os.path.exists(list_dst):
+                        with open(list_dst, "w") as f_list:
+                            for sample_info in samples_info:
+                                f_list.write(" ".join(sample_info) + "\n")
+                    else:
+                        print(
+                            "List {} already exists, skip its generation."
+                            " Please remove it if you want to regenerate the list".format(
+                                list_dst
+                            ),
+                            flush=True,
+                        )
+
     else:
         print(f"{train_file} exists, doing verify")
         new_list = []
@@ -113,6 +112,12 @@ if __name__ == "__main__":
         type=int,
     )
 
+    parser.add_argument(
+        "--sph2pipe",
+        help="path to sph2pipe executable",
+        default="./sph2pipe_v2.5/sph2pipe",
+    )
+
     args=parser.parse_args()
 
     audio_path=os.path.join(args.dst, "audio")
@@ -122,5 +127,5 @@ if __name__ == "__main__":
     os.makedirs(text_path, exist_ok=True)
     os.makedirs(lists_path, exist_ok=True)
 
-    prepare_fisher(args.fisher, audio_path, text_path, lists_path, args.process)
+    prepare_fisher(args.fisher, audio_path, text_path, lists_path, args.process, args.sph2pipe)
 

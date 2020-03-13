@@ -24,8 +24,8 @@ def cure_text(text):
 def read_dialogs(lines):
     dialogs = []
     for line in lines:
-        if len(line) > 0 and not line.startswith("#"):  
-            chunks = line.split()
+        chunks = line.split()
+        if len(chunks) > 0 and not line.startswith("#"):  
             text = chunks[3:]
             start_seconds = float(chunks[0]) * 1000
             end_seconds = float(chunks[1]) * 1000

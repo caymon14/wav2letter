@@ -38,8 +38,8 @@ def read_dialogs(lines):
 def fisher_to_list(audio_path, fisher_path, txt_file):
     with open(txt_file, "r") as f:
         dialogs = read_dialogs(f.readlines())
-        _, scenario = os.path.split(f)
-        name = os.path.basename(f).split(".")[0]
+        _, scenario = os.path.split(txt_file)
+        name = os.path.basename(txt_file).split(".")[0]
         export_dir = f"{audio_path}/fisher/{scenario}"
         lists = []
         for text, start, end in dialogs:

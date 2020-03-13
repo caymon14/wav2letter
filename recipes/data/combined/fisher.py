@@ -49,7 +49,6 @@ def fisher_to_list(audio_path, fisher_path, txt_file, sph2pipe):
         for channel in ["1", "2"]:
             wav_filename = f"{name}_c{channel}.wav"
             wav_file = os.path.join(os.path.dirname(txt_file), wav_filename)
-            print("converting {} to {}".format(sph_file, wav_file))
             subprocess.check_call([sph2pipe, "-c", channel, "-p", "-f", "rif", sph_file, wav_file])
 
         lists = []
@@ -57,6 +56,8 @@ def fisher_to_list(audio_path, fisher_path, txt_file, sph2pipe):
             lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
                                         start, end, name, export_dir, text)
             lists.append(lst_record)
+        for channel in ["1", "2"]:   
+            os.remove(os.path.join(os.path.dirname(txt_file),  f"{name}_c{channel}.wav"))
         return lists
             
 

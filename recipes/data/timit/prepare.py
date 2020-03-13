@@ -125,7 +125,7 @@ if __name__ == "__main__":
         return path.upper() if upper_case else path
 
     # prepare audio, text and lists
-    for ds_type in ["train", "valid", "test"]:
+    for ds_type in ["timit-train", "timit-dev", "timit-test"]:
         print("Writing TIMIT {} data part".format(ds_type), flush=True)
         data_list = os.path.join(current_dir, ds_type + ".lst")
         with open(data_list, "r") as f_paths:

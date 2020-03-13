@@ -7,7 +7,7 @@ import re
 
 import numpy
 from tqdm import tqdm
-from utils import remove_punct
+from utils import remove_punct, convert_to_flac
 from functools import partial
 from glob import glob
 from pydub import AudioSegment
@@ -34,42 +34,37 @@ def read_dialogs(lines):
             dialogs.append((text, start, end))
 
     return dialogs
+
+def fisher_to_list(audio_path, fisher_path, txt_file):
+    with open(txt_file, "r") as f:
+        dialogs = read_dialogs(f.readlines())
+        scenario = os.path.dirname(f).split("/")[-1]
+        name = os.path.basename(f).split(".")[0]
+        export_dir = f"{audio_path}/fisher/{scenario}"
+        lists = []
+        for text, start, end in dialogs:
+            lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}.sph",
+                                        start, end, name, export_dir, text)
+            lists.append(lst_record)
+        return lists
             
 
 def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
     train_file = f"{lists_path}/fisher-train.lst"
-    test_file = f"{lists_path}/fisher-test.lst"
-    if not os.path.exists(train_file) or not os.path.exists(test_file):
-        with open(train_file, "w") as lst, open(test_file, "w") as lst_test:
-            for file in glob(f"{fisher}/*.txt"):
-                with Pool(args.process) as p:
-                    samples_info = list(
-                        tqdm(
-                            p.imap(
-                                convert_to_flac,
-                                zip(
-                                    samples,
-                                    numpy.arange(n_samples),
-                                    [data_dst] * n_samples,
-                                    [args.sph2pipe] * n_samples,
-                                ),
-                            ),
-                            total=n_samples,
-                        )
+    if not os.path.exists(train_file):
+        with open(train_file, "w") as lst:
+            with Pool(processes) as p:
+                files = glob(f"{fisher}/*.txt")
+                to_list = partial(fisher_to_list, audio_path, fisher)
+                samples = list(
+                    tqdm(
+                        p.imap(to_list, files),
+                        total=len(files),
                     )
-                    list_dst = os.path.join(lists_path, set_name + ".lst")
-                    if not os.path.exists(list_dst):
-                        with open(list_dst, "w") as f_list:
-                            for sample_info in samples_info:
-                                f_list.write(" ".join(sample_info) + "\n")
-                    else:
-                        print(
-                            "List {} already exists, skip its generation."
-                            " Please remove it if you want to regenerate the list".format(
-                                list_dst
-                            ),
-                            flush=True,
-                        )
+                )
+            with open(train_file, "w") as list_f:
+                for s in samples:
+                    list_f.writelines(s)
 
     else:
         print(f"{train_file} exists, doing verify")

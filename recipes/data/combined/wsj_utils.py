@@ -11,6 +11,7 @@ import os
 import re
 
 import sox
+from utils import remove_punct
 
 
 def preprocess_word(word):
@@ -36,9 +37,11 @@ def preprocess_word(word):
     if word != "!EXCLAMATION-POINT":
         word = word.replace("!", "")  # some emphasis stuff
     word = re.sub(r"^\.$", "", word)
+    word = remove_punct(word)
+
     word = word.lower()
 
-    return word
+    return " ".join(map(lambda x: x.strip(), word.split(" ")))
 
 
 def find_transcripts(dst_paths):
@@ -86,9 +89,11 @@ def ndx_to_samples(prefix, filename, transcripts, transform=None, sep="-"):
             suf = suf.lstrip(" /")
             ds, subset, _, sample_id = suf.replace(".wv1", "").rsplit("/", 3)
 
-            fname = os.path.join(prefix, "{}{}{}.{}".format(p1, sep, p2, p3), suf)
+            fname = os.path.join(
+                prefix, "{}{}{}.{}".format(p1, sep, p2, p3), suf)
 
-            assert os.path.exists(fname), "Audio file {} doesn't exist".format(fname)
+            assert os.path.exists(
+                fname), "Audio file {} doesn't exist".format(fname)
             assert (
                 subset in transcripts
             ), "Subset {} is absent in the transcription".format(subset)
@@ -119,18 +124,21 @@ def convert_to_flac(sample_data):
     # flac
     if not os.path.exists(out_prefix + ".flac"):
         tmp_file = os.path.join(dst, "{pid}_tmp.wav".format(pid=os.getpid()))
-        os.system("{sph} -f wav {i} {o}".format(sph=sph2pipe, i=filename, o=tmp_file))
+        os.system("{sph} -f wav {i} {o}".format(sph=sph2pipe,
+                                                i=filename, o=tmp_file))
         assert (
             sox.file_info.duration(tmp_file) > 0
         ), "Audio file {} duration is zero.".format(filename)
 
         sox_tfm = sox.Transformer()
-        sox_tfm.set_output_format(file_type="flac", encoding="signed-integer", bits=16)
+        sox_tfm.set_output_format(
+            file_type="flac", encoding="signed-integer", bits=16)
         sox_tfm.build(tmp_file, out_prefix + ".flac")
 
         os.remove(tmp_file)
 
-    duration = sox.file_info.duration(out_prefix + ".flac") * 1000  # miliseconds
+    duration = sox.file_info.duration(
+        out_prefix + ".flac") * 1000  # miliseconds
     transcript = " ".join(
         [preprocess_word(word) for word in sample["transcript"].split()]
     )

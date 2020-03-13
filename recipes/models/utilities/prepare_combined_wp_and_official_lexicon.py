@@ -25,7 +25,8 @@ import sentencepiece as spm
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Librispeech Dataset creation.")
+    parser = argparse.ArgumentParser(
+        description="Librispeech Dataset creation.")
     parser.add_argument(
         "--data_dst", help="data destination directory", default="./data_dir"
     )
@@ -37,7 +38,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--process", help="# of process for Multiprocessing", default=8, type=int
     )
-    parser.add_argument("--wp", help="number of word pieces", default=10000, type=int)
+    parser.add_argument("--wp", help="number of word pieces",
+                        default=10000, type=int)
     parser.add_argument(
         "--nbest",
         help="number of best segmentations for each word (or numbers comma separated)",
@@ -47,8 +49,41 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     subpaths = {
-        "train": ["train-clean-100", "train-clean-360", "train-other-500", "ami-sdm-train", "ami-mdm-train", "ami-ihm-train", "ted-train", "commonvoice-train", "callhome-train", "dev-clean", "dev-other", "ami-sdm-dev", "ami-mdm-dev", "ami-ihm-dev", "ted-dev", "commonvoice-dev"],
-        "dev": ["test-clean", "test-other", "ami-sdm-test", "ami-mdm-test", "ami-ihm-test", "ted-test", "commonvoice-test", "callhome-test"],
+        "train": [
+            "train-clean-100",
+            "train-clean-360",
+            "train-other-500",
+            "fisher-train",
+            "timit-train",
+            "ami-sdm-train",
+            "ami-mdm-train",
+            "ami-ihm-train",
+            "ted-train",
+            "commonvoice-train",
+            "callhome-train",
+            "dev-clean",
+            "dev-other",
+            "ami-sdm-dev",
+            "ami-mdm-dev",
+            "ami-ihm-dev",
+            "ted-dev",
+            "si84",
+            "si284",
+            "commonvoice-dev"
+        ],
+        "dev": [
+            "test-clean",
+            "test-other",
+            "timit-test",
+            "fisher-test",
+            "ami-sdm-test",
+            "ami-mdm-test",
+            "ami-ihm-test",
+            "nov92_5k",
+            "nov92",
+            "ted-test",
+            "commonvoice-test",
+            "callhome-test"],
     }
 
     lists_path = os.path.join(args.data_dst, "lists")
@@ -115,7 +150,8 @@ if __name__ == "__main__":
         print("Arpa file {} exist, skip its downloading.".format(arpa_file))
     # temporary arpa file in lowercase
     os.system(
-        "cat {arpa} | tr '[:upper:]' '[:lower:]' > {arpa}.lower".format(arpa=arpa_file)
+        "cat {arpa} | tr '[:upper:]' '[:lower:]' > {arpa}.lower".format(
+            arpa=arpa_file)
     )
     lm_words = []
     with open(arpa_file + ".lower", "r") as arpa:
@@ -127,7 +163,8 @@ if __name__ == "__main__":
             word = word.strip().lower()
             if word == "<unk>" or word == "<s>" or word == "</s>":
                 continue
-            assert re.match("^[a-z']+$", word), "invalid word - {w}".format(w=word)
+            assert re.match(
+                "^[a-z']+$", word), "invalid word - {w}".format(w=word)
             lm_words.append(word)
 
     # word -> word piece lexicon for loading targets

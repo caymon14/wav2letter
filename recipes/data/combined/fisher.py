@@ -53,7 +53,7 @@ def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pip
     train_file = f"{lists_path}/fisher-train.lst"
     if not os.path.exists(train_file):
         with Pool(processes) as p:
-            files = glob(f"{fisher}/**/*.txt")
+            files = list(glob(f"{fisher}/trans/**/*.txt"))
             to_list = partial(fisher_to_list, audio_path, fisher)
             samples = list(
                 tqdm(

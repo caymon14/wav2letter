@@ -27,7 +27,7 @@ def read_dialogs(lines):
     for line in lines:
         chunks = line.split()
         if len(chunks) > 0 and not line.startswith("#"):  
-            text = cure_text(chunks[3:])
+            text = cure_text(" ".join(chunks[3:]))
             start_seconds = float(chunks[0]) * 1000
             end_seconds = float(chunks[1]) * 1000
             channel = 1

@@ -52,9 +52,10 @@ def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
 
         lists = []
         for i, (text, start, end, channel) in enumerate(dialogs):
-            lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
-                                        start, end, f"{name}_{i}", export_dir, text)
-            lists.append(lst_record)
+            if alpha.match(text):
+                lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
+                                            start, end, f"{name}_{i}", export_dir, text)
+                lists.append(lst_record)
         for channel in ["1", "2"]:   
             os.remove(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav")
         return lists

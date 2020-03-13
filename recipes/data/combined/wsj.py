@@ -81,7 +81,7 @@ if __name__ == "__main__":
         lambda line: None if "11_2_1:wsj0/si_tr_s/401" in line else line,
     )
     assert len(subsets["si284"]
-               ) == 37416, "Incorrect number of samples in si284 part: should be 37416, but fould {}.".format(len(subsets["si284"]))
+               ) == 7138, "Incorrect number of samples in si284 part: should be 7138., but fould {}.".format(len(subsets["si284"]))
 
     subsets["nov92"] = ndx_to_samples(
         args.wsj0,

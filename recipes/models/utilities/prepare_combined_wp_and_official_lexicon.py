@@ -55,6 +55,7 @@ if __name__ == "__main__":
             "train-other-500",
             "fisher-train",
             "timit-train",
+            "timit-dev",
             "ami-sdm-train",
             "ami-mdm-train",
             "ami-ihm-train",

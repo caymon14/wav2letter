@@ -36,6 +36,8 @@ from tqdm import tqdm
 from wsj_utils import convert_to_flac, find_transcripts, ndx_to_samples, preprocess_word
 
 
+alpha = re.compile(r"^[a-zA-Z\s]+$") 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="WSJ Dataset creation.")
     parser.add_argument(
@@ -149,7 +151,10 @@ if __name__ == "__main__":
             if not os.path.exists(list_dst):
                 with open(list_dst, "w") as f_list:
                     for sample_info in samples_info:
-                        f_list.write(" ".join(sample_info) + "\n")
+                        if alpha.match(sample_info[-1]):
+                            f_list.write(" ".join(sample_info) + "\n")
+                        else:
+                            print(f"Bad sample {sample_info}")
             else:
                 print(
                     "List {} already exists, skip its generation."

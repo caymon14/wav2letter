@@ -52,19 +52,18 @@ def fisher_to_list(audio_path, fisher_path, txt_file):
 def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
     train_file = f"{lists_path}/fisher-train.lst"
     if not os.path.exists(train_file):
-        with open(train_file, "w") as lst:
-            with Pool(processes) as p:
-                files = glob(f"{fisher}/*.txt")
-                to_list = partial(fisher_to_list, audio_path, fisher)
-                samples = list(
-                    tqdm(
-                        p.imap(to_list, files),
-                        total=len(files),
-                    )
+        with Pool(processes) as p:
+            files = glob(f"{fisher}/**/*.txt")
+            to_list = partial(fisher_to_list, audio_path, fisher)
+            samples = list(
+                tqdm(
+                    p.imap(to_list, files),
+                    total=len(files),
                 )
-            with open(train_file, "w") as list_f:
-                for s in samples:
-                    list_f.writelines(s)
+            )
+        with open(train_file, "w") as list_f:
+            for s in samples:
+                list_f.writelines(s)
 
     else:
         print(f"{train_file} exists, doing verify")

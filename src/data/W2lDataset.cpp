@@ -43,10 +43,19 @@ std::vector<af::array> W2lDataset::get(const int64_t idx) const {
   checkIndexBounds(idx);
 
   W2lFeatureData feat;
-  if (FLAGS_nthread > 0) {
-    feat = getFeatureDataAndPrefetch(idx);
-  } else {
-    feat = getFeatureData(idx);
+  try {
+    if (FLAGS_nthread > 0) {
+      feat = getFeatureDataAndPrefetch(idx);
+    } else {
+      feat = getFeatureData(idx);
+    }
+  } catch(...) {
+    LOG(WARNING) << "Error loading dataset " << idx;
+    if (FLAGS_nthread > 0) {
+      feat = getFeatureDataAndPrefetch(idx + 1);
+    } else {
+      feat = getFeatureData(idx + 1);
+    }
   }
   std::vector<af::array> result(kNumDataIdx);
   result[kInputIdx] = feat.input.empty()

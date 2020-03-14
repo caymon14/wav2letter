@@ -166,12 +166,12 @@ if __name__ == "__main__":
         ) as ftwlist:
             for sample in samples_info:
                 flist.write(
-                    "{}\t{}\t{}\t{}\n".format(
+                    "{} {} {} {}\n".format(
                         sample[0], sample[1], sample[2], sample[4]
                     )
                 )
                 fwlist.write(
-                    "{}\t{}\t{}\t{}\n".format(
+                    "{} {} {} {}\n".format(
                         sample[0], sample[1], sample[2], sample[3]
                     )
                 )

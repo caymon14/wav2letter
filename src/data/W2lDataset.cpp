@@ -50,13 +50,10 @@ std::vector<af::array> W2lDataset::get(const int64_t idx) const {
       feat = getFeatureData(idx);
     }
   } catch(...) {
-    LOG(WARNING) << "Error loading dataset " << idx;
-    if (FLAGS_nthread > 0) {
-      feat = getFeatureDataAndPrefetch(idx + 1);
-    } else {
-      feat = getFeatureData(idx + 1);
-    }
+    LOG(WARNING) << "Error loading dataset skipping to next " << idx;
+    return get(idx+1);
   }
+
   std::vector<af::array> result(kNumDataIdx);
   result[kInputIdx] = feat.input.empty()
       ? af::array(feat.inputDims)

@@ -32,8 +32,8 @@ def read_dialogs(name, transcript_map):
         metadata = file_id.split("-")[1]
         speaker = metadata.split("_")[0]
 
-        start = float(metadata.split("_")[1])
-        end = float(metadata.split("-")[1])
+        start = int(metadata.split("_")[1])
+        end = int(file_id.split("-")[2])
         channel = 1
         if speaker == "B":
             channel = 2

@@ -54,6 +54,8 @@ if __name__ == "__main__":
             "train-clean-360",
             "train-other-500",
             "fisher-1-train",
+            "fisher-2-train",
+            "swbd-train",
             "timit-train",
             "timit-dev",
             "ami-sdm-train",

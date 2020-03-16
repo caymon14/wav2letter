@@ -26,7 +26,9 @@ def cure_text(text):
 def read_dialogs(name, transcript_map):
     dialogs = []
     for line in transcript_map[name]:
-        file_id, text = line.split()
+        chunks = line.split()
+        file_id = chunks[0]
+        text = chunks[1:]
         metadata = file_id.split("-")[1]
         speaker = metadata.split("_")[0]
 

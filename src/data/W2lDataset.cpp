@@ -49,9 +49,13 @@ std::vector<af::array> W2lDataset::get(const int64_t idx) const {
     } else {
       feat = getFeatureData(idx);
     }
-  } catch(...) {
+  } catch (...) {
     LOG(WARNING) << "Error loading dataset skipping to next " << idx;
-    return get(idx+1);
+    if (idx == 0) {
+      return get(idx + 1);
+    } else {
+      return get(idx - 1);
+    }
   }
 
   std::vector<af::array> result(kNumDataIdx);

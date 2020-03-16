@@ -192,6 +192,7 @@ def remove_punct(text):
     text = text.replace("{", "")
     text = text.replace("}", "")
     text = text.replace(";", "")
+    text = text.replace("_1", "")
 
     return text
 

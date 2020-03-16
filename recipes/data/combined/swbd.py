@@ -12,6 +12,7 @@ from functools import partial
 from glob import glob
 from pydub import AudioSegment
 import subprocess
+from collections import defaultdict
 
 alpha = re.compile(r"^[a-zA-Z\s]+$") 
 max_duration = 10 * 1000
@@ -22,51 +23,55 @@ def cure_text(text):
     text = text.lower()
     return " ".join(map(lambda x: x.strip(), text.split(" ")))
 
-def read_dialogs(lines):
+def read_dialogs(name, transcript_map):
     dialogs = []
-    for line in lines:
-        chunks = line.split()
-        if len(chunks) > 0 and not line.startswith("#"):  
-            text = cure_text(" ".join(chunks[3:]))
-            start_seconds = float(chunks[0]) * 1000
-            end_seconds = float(chunks[1]) * 1000
-            channel = 1
-            if chunks[2] == "B:":
-                channel = 2
-            start = float(start_seconds)
-            end = float(end_seconds)
-            dialogs.append((text, start, end, channel))
+    for line in transcript_map[name]:
+        file_id, text = line.split()
+        metadata = file_id.split("-")[1]
+        speaker = metadata.split("_")[0]
+
+        start = float(metadata.split("_")[1])
+        end = float(metadata.split("-")[1])
+        channel = 1
+        if speaker == "B":
+            channel = 2
+
+        dialogs.append((text, start, end, channel))
 
     return dialogs
 
-def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
-    with open(txt_file, "r") as f:
-        dialogs = read_dialogs(f.readlines())
-        scenario = os.path.dirname(txt_file).split("/")[-1]
-        name = os.path.basename(txt_file).split(".")[0]
-        export_dir = f"{audio_path}/fisher/{scenario}"
-        sph_file = f"{fisher_path}/audio/{scenario}/{name}.sph"
-        for channel in ["1", "2"]:
-            wav_file = f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav"
-            subprocess.check_call([sph2pipe, "-c", channel, "-p", "-f", "rif", sph_file, wav_file])
+def swbd_to_list(audio_path, swbd_path, sph2pipe, transcript_map, sph_file):
+    name = os.path.basename(sph_file).split(".")[0]
+    dialogs = read_dialogs(name, transcript_map)
 
-        lists = []
-        for i, (text, start, end, channel) in enumerate(dialogs):
-            if alpha.match(text):
-                lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
-                                            start, end, f"{name}_{i}", export_dir, text)
-                lists.append(lst_record)
-        for channel in ["1", "2"]:   
-            os.remove(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav")
-        return lists
+    export_dir = f"{audio_path}/swbd/"
+    
+    for channel in ["1", "2"]:
+        wav_file = f"{swbd_path}/{name}_c{channel}.wav"
+        subprocess.check_call([sph2pipe, "-c", channel, "-p", "-f", "rif", sph_file, wav_file])
+
+    lists = []
+    for i, (text, start, end, channel) in enumerate(dialogs):
+        if alpha.match(text):
+            lst_record = convert_to_flac(f"{swbd_path}/{name}_c{channel}.wav",
+                                        start, end, f"{name}_{i}", export_dir, text)
+            lists.append(lst_record)
+    for channel in ["1", "2"]:   
+        os.remove(f"{swbd_path}/audio/{scenario}/{name}_c{channel}.wav")
+    return lists
             
 
-def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
-    train_file = f"{lists_path}/fisher-2-train.lst"
+def prepare_swbd(swbd, audio_path, text_path, lists_path, processes, sph2pipe):
+    train_file = f"{lists_path}/swbd-train.lst"
+    transcript_map = defaultdict()
+    with open(f"{swbd}/train", "r") as train_f:
+        for line in train_f.readlines():
+            name = line.split()[0].split("-")[0]
+            transcript_map[name].append(line)
     if not os.path.exists(train_file):
         with Pool(processes) as p:
-            files = list(glob(f"{fisher}/trans/**/*.txt"))
-            to_list = partial(fisher_to_list, audio_path, fisher, sph2pipe)
+            files = list(glob(f"{swbd}/**/*.sph"))
+            to_list = partial(swbd_to_list, audio_path, swbd, sph2pipe, transcript_map)
             samples = list(
                 tqdm(
                     p.imap(to_list, files),
@@ -93,7 +98,7 @@ def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pip
         with open(train_file, "w") as list_f:
             list_f.writelines(new_list)
     
-    print("Prepared fisher", flush=True)
+    print("Prepared swbd", flush=True)
 
 
 if __name__ == "__main__":
@@ -104,9 +109,9 @@ if __name__ == "__main__":
         default="./data_dir",
     )
     parser.add_argument(
-        "--fisher",
-        help="Fisher data location",
-        default="./fisher",
+        "--swbd",
+        help="swbd data location",
+        default="./swbd",
     )
 
     parser.add_argument(
@@ -128,9 +133,9 @@ if __name__ == "__main__":
     audio_path=os.path.join(args.dst, "audio")
     text_path=os.path.join(args.dst, "text")
     lists_path=os.path.join(args.dst, "lists")
-    os.makedirs(f"{audio_path}/fisher", exist_ok=True)
+    os.makedirs(f"{audio_path}/swbd", exist_ok=True)
     os.makedirs(text_path, exist_ok=True)
     os.makedirs(lists_path, exist_ok=True)
 
-    prepare_fisher(args.fisher, audio_path, text_path, lists_path, args.process, args.sph2pipe)
+    prepare_swbd(args.swbd, audio_path, text_path, lists_path, args.process, args.sph2pipe)
 

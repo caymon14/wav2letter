@@ -64,7 +64,7 @@ def swbd_to_list(audio_path, swbd_path, sph2pipe, transcript_map, sph_file):
 def prepare_swbd(swbd, audio_path, text_path, lists_path, processes, sph2pipe):
     train_file = f"{lists_path}/swbd-train.lst"
     transcript_map = defaultdict()
-    with open(f"{swbd}/train", "r") as train_f:
+    with open(f"{swbd}/text", "r") as train_f:
         for line in train_f.readlines():
             name = line.split()[0].split("-")[0]
             transcript_map[name].append(line)

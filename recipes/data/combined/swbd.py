@@ -70,7 +70,7 @@ def prepare_swbd(swbd, audio_path, text_path, lists_path, processes, sph2pipe):
             transcript_map[name].append(line)
     if not os.path.exists(train_file):
         with Pool(processes) as p:
-            files = list(glob(f"{swbd}/**/*.sph"))
+            files = list(glob(f"{swbd}/**/data/*.sph"))
             to_list = partial(swbd_to_list, audio_path, swbd, sph2pipe, transcript_map)
             samples = list(
                 tqdm(

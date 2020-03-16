@@ -32,8 +32,8 @@ def read_dialogs(name, transcript_map):
         metadata = file_id.split("-")[1]
         speaker = metadata.split("_")[0]
 
-        start = int(metadata.split("_")[1])
-        end = int(file_id.split("-")[2])
+        start = int(metadata.split("_")[1]) * 10
+        end = int(file_id.split("-")[2]) * 10
         channel = 1
         if speaker == "B":
             channel = 2
@@ -59,7 +59,7 @@ def swbd_to_list(audio_path, swbd_path, sph2pipe, transcript_map, sph_file):
                                         start, end, f"{name}_{i}", export_dir, text)
             lists.append(lst_record)
     for channel in ["1", "2"]:   
-        os.remove(f"{swbd_path}/audio/{scenario}/{name}_c{channel}.wav")
+        os.remove(f"{swbd_path}/{name}_c{channel}.wav")
     return lists
             
 

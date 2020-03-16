@@ -28,7 +28,7 @@ def read_dialogs(name, transcript_map):
     for line in transcript_map[name]:
         chunks = line.split()
         file_id = chunks[0]
-        text = cure_text(chunks[1:])
+        text = cure_text(" ".join(chunks[1:]))
         metadata = file_id.split("-")[1]
         speaker = metadata.split("_")[0]
 

@@ -93,7 +93,7 @@ def prepare_swbd(swbd, audio_path, text_path, lists_path, processes, sph2pipe):
                 text = " ".join(line.strip().split(" ")[3:])
                 params = " ".join(line.strip().split(" ")[:3])
                 line = f"{params} {text}\n"
-                if not os.path.exists(filename) or len(text) < 2 or not alpha.match(text):
+                if not os.path.exists(filename) or len(text) < 4 or not alpha.match(text):
                     print(f"{filename} does not exists or text is empty, text: {text}")
                 else:
                     new_list.append(line)

@@ -162,7 +162,8 @@ def ted_to_list(audio_path, f, ted_location, line):
 
 def remove_punct(text):
     text = text.replace("<unk>", "")
-    text = text.replace("[vocalized-noise]", "noise")
+    text = text.replace("[vocalized-noise]", "")
+    text = text.replace("[noise]", "")
     text = text.replace("\"", "")
     text = text.replace("!", "")
     text = text.replace("?", "")

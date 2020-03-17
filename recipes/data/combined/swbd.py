@@ -54,7 +54,7 @@ def swbd_to_list(audio_path, swbd_path, sph2pipe, transcript_map, sph_file):
 
     lists = []
     for i, (text, start, end, channel) in enumerate(dialogs):
-        if alpha.match(text):
+        if len(text) > 1 and alpha.match(text):
             lst_record = convert_to_flac(f"{swbd_path}/{name}_c{channel}.wav",
                                         start, end, f"{name}_{i}", export_dir, text)
             lists.append(lst_record)

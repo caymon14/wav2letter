@@ -46,7 +46,7 @@ def swbd_to_list(audio_path, swbd_path, sph2pipe, transcript_map, sph_file):
     name = os.path.basename(sph_file).split(".")[0]
     dialogs = read_dialogs(name, transcript_map)
 
-    export_dir = f"{audio_path}/swbd/"
+    export_dir = f"{audio_path}/swbd"
     
     for channel in ["1", "2"]:
         wav_file = f"{swbd_path}/{name}_c{channel}.wav"

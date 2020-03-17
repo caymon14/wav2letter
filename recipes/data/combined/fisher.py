@@ -52,7 +52,7 @@ def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
 
         lists = []
         for i, (text, start, end, channel) in enumerate(dialogs):
-            if alpha.match(text):
+            if len(text) > 1 and alpha.match(text):
                 lst_record = convert_to_flac(f"{fisher_path}/audio/{scenario}/{name}_c{channel}.wav",
                                             start, end, f"{name}_{i}", export_dir, text)
                 lists.append(lst_record)
@@ -62,7 +62,7 @@ def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
             
 
 def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
-    train_file = f"{lists_path}/fisher-2-train.lst"
+    train_file = f"{lists_path}/fisher-train.lst"
     if not os.path.exists(train_file):
         with Pool(processes) as p:
             files = list(glob(f"{fisher}/trans/**/*.txt"))

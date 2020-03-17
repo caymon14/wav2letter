@@ -62,7 +62,7 @@ def fisher_to_list(audio_path, fisher_path, sph2pipe, txt_file):
             
 
 def prepare_fisher(fisher, audio_path, text_path, lists_path, processes, sph2pipe):
-    train_file = f"{lists_path}/fisher-2-train.lst"
+    train_file = f"{lists_path}/fisher-1-train.lst"
     if not os.path.exists(train_file):
         with Pool(processes) as p:
             files = list(glob(f"{fisher}/trans/**/*.txt"))

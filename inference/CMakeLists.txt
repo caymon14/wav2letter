@@ -50,7 +50,7 @@ include(BuildGoogleTest)
 
 #--- Download/build Cereal ---
 set(CEREAL_INSTALL_PATH ${CMAKE_CURRENT_LIST_DIR}/cereal)
-include(Findcereal)
+include(Buildcereal)
 # Move cereal headers
 install(DIRECTORY ${CEREAL_SOURCE_DIR}/include/cereal
   DESTINATION ${CEREAL_INSTALL_PATH}

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5.1)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+include(BuildFbGemm)
+
 add_library(streaming_inference_modules_nn_backend
   ${CMAKE_CURRENT_LIST_DIR}/Conv1dFbGemm.cpp
   ${CMAKE_CURRENT_LIST_DIR}/LinearFbGemm.cpp
@@ -14,6 +16,9 @@ set_target_properties(
     LINKER_LANGUAGE CXX
     CXX_STANDARD 11
 )
+
+add_dependencies(streaming_inference_modules_nn_backend fbgemm)
+add_dependencies(streaming_inference_modules_nn_backend cereal)
 
 target_link_libraries(streaming_inference_modules_nn_backend
   PUBLIC

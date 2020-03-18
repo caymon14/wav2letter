@@ -50,12 +50,16 @@ target_include_directories(
     ${wav2letter-inference_SOURCE_DIR}/..
 )
 
+add_dependencies(streaming_inference_modules_nn_impl cereal)
+
 target_link_libraries(
   streaming_inference_modules_nn_impl
   PUBLIC
     streaming_inference_modules_nn_backend
     streaming_inference_common
 )
+
+add_dependencies(streaming_inference_modules_nn cereal)
 
 target_link_libraries(
   streaming_inference_modules_nn
@@ -64,3 +68,5 @@ target_link_libraries(
     streaming_inference_modules_nn_backend
     streaming_inference_common
 )
+
+add_dependencies(streaming_inference_modules_nn cereal)

@@ -7,6 +7,8 @@ add_library(streaming_inference_common
   ${CMAKE_CURRENT_LIST_DIR}/IOBuffer.cpp
 )
 
+add_dependencies(streaming_inference_common cereal)
+
 target_include_directories(
   streaming_inference_common
   PUBLIC

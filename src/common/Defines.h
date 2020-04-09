@@ -88,6 +88,7 @@ constexpr const char* kRunIdx = "runIdx";
 constexpr const char* kRunPath = "runPath";
 constexpr const char* kProgramName = "programname";
 constexpr const char* kEpoch = "epoch";
+constexpr const char* kUpdates = "updates";
 constexpr const char* kSGDOptimizer = "sgd";
 constexpr const char* kAdamOptimizer = "adam";
 constexpr const char* kRMSPropOptimizer = "rmsprop";
@@ -152,6 +153,10 @@ DECLARE_double(momentum);
 DECLARE_double(weightdecay);
 DECLARE_bool(sqnorm);
 DECLARE_double(lrcrit);
+DECLARE_int64(warmup);
+DECLARE_int64(saug_start_update);
+DECLARE_int64(lr_decay);
+DECLARE_int64(lr_decay_step);
 DECLARE_double(maxgradnorm);
 DECLARE_double(adambeta1); // TODO rename into optim beta1
 DECLARE_double(adambeta2); // TODO rename into optim beta2
@@ -180,6 +185,15 @@ DECLARE_int64(devwin);
 DECLARE_int64(fftcachesize);
 DECLARE_int64(framesizems);
 DECLARE_int64(framestridems);
+
+/* ========== SPECAUGMENT OPTIONS ========== */
+
+DECLARE_bool(use_saug);
+DECLARE_int64(saug_fmaskf);
+DECLARE_int64(saug_fmaskn);
+DECLARE_int64(saug_tmaskt);
+DECLARE_double(saug_tmaskp);
+DECLARE_int64(saug_tmaskn);
 
 /* ========== RUN OPTIONS ========== */
 

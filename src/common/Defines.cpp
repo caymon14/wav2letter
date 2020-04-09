@@ -75,12 +75,25 @@ DEFINE_bool(sqnorm, false, "use square-root while normalizing criterion loss");
 DEFINE_bool(lrcosine, false, "use cosine learning rate schedule");
 
 // LEARNING HYPER-PARAMETER OPTIONS
-DEFINE_int64(iter, 1000000, "number of iterations");
+DEFINE_int64(iter, std::numeric_limits<int64_t>::max(), "number of updates");
 DEFINE_bool(itersave, false, "save model at each iteration");
 DEFINE_double(lr, 1.0, "learning rate");
 DEFINE_double(momentum, 0.0, "momentum factor");
 DEFINE_double(weightdecay, 0.0, "weight decay (L2 penalty)");
 DEFINE_double(lrcrit, 0, "criterion learning rate");
+DEFINE_int64(warmup, 8000, "the LR warmup parameter, in updates");
+DEFINE_int64(
+    saug_start_update,
+    -1,
+    "Use SpecAugment starting at the update number inputted. -1 means no SpecAugment");
+DEFINE_int64(
+    lr_decay,
+    std::numeric_limits<int64_t>::max(),
+    "Epoch for the first LR decay");
+DEFINE_int64(
+    lr_decay_step,
+    std::numeric_limits<int64_t>::max(),
+    "Epochs for each new LR decay");
 DEFINE_double(maxgradnorm, 0, "Clip gradients at value (0 = no clipping)");
 DEFINE_double(adambeta1, 0.9, "beta1 in the Adam optimizer");
 DEFINE_double(adambeta2, 0.999, "beta2 in the Adam optimizer");
@@ -91,8 +104,8 @@ DEFINE_int64(gradaccum, 1, "for how many steps accumulate gradient before update
 // LR-SCHEDULER OPTIONS
 DEFINE_int64(
     stepsize,
-    1000000,
-    "We multiply LR by gamma every stepsize epochs");
+    std::numeric_limits<int64_t>::max(),
+    "We multiply LR by gamma every stepsize updates");
 DEFINE_double(gamma, 1.0, "the LR annealing multiplier");
 
 // OPTIMIZER OPTIONS
@@ -116,6 +129,17 @@ DEFINE_int64(
     framestridems,
     10,
     "Stride millisecond for power spectrum feature");
+
+// SPECAUGMENT OPTIONS
+DEFINE_bool(use_saug, false, "Use SpecAugment");
+DEFINE_int64(saug_fmaskf, 27, "Max number of frequency bands that are masked");
+DEFINE_int64(saug_fmaskn, 2, "Number of frequency masks");
+DEFINE_int64(saug_tmaskt, 100, "Max number of timesteps that are masked");
+DEFINE_double(
+    saug_tmaskp,
+    1.0,
+    "Max proportion of the input sequence (1.0 is 100%) that can be masked in time");
+DEFINE_int64(saug_tmaskn, 2, "Number of time masks");
 
 // RUN OPTIONS
 DEFINE_string(datadir, "", "speech data directory");
@@ -211,7 +235,7 @@ DEFINE_int32(
     "hard attention limit");
 
 // ASG OPTIONS
-DEFINE_int64(linseg, 0, "# of epochs of LinSeg to init transitions for ASG");
+DEFINE_int64(linseg, 0, "# of updates of LinSeg to init transitions for ASG");
 DEFINE_double(linlr, -1.0, "LinSeg learning rate (if < 0, use lr)");
 DEFINE_double(
     linlrcrit,
@@ -280,7 +304,7 @@ DEFINE_bool(trainWithWindow, false, "use window in training");
 DEFINE_int64(
     pretrainWindow,
     0,
-    "use window in training for pretrainWindow epochs");
+    "use window in training for pretrainWindow in updates");
 DEFINE_double(gumbeltemperature, 1.0, "temperature in gumbel softmax");
 DEFINE_int64(decoderrnnlayer, 1, "The number of decoder rnn layers.");
 DEFINE_int64(decoderattnround, 1, "The number of decoder attention rounds.");

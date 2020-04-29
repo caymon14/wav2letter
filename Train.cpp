@@ -130,13 +130,22 @@ int main(int argc, char** argv) {
   // aren't
   w2l::handleDeprecatedFlags();
 
-  af::setMemStepSize(FLAGS_memstepsize);
+  auto deviceInterface = std::make_shared<fl::MemoryManagerDeviceInterface>();
+  auto adapter = std::make_shared<fl::CachingMemoryManager>(
+      af::getDeviceCount(), deviceInterface);
+  auto installer = fl::cpp::make_unique<fl::MemoryManagerInstaller>(adapter);
+  installer->setAsMemoryManager();
+
   af::setSeed(FLAGS_seed);
   af::setFFTPlanCacheSize(FLAGS_fftcachesize);
 
   std::shared_ptr<fl::Reducer> reducer = nullptr;
   if (FLAGS_enable_distributed) {
-    initDistributed(FLAGS_world_rank, FLAGS_world_size, FLAGS_rndv_filepath);
+    initDistributed(
+        FLAGS_world_rank,
+        FLAGS_world_size,
+        FLAGS_max_devices_per_node,
+        FLAGS_rndv_filepath);
     reducer = std::make_shared<fl::CoalescingReducer>(
         1.0 / fl::getWorldSize(), true, true);
   }
@@ -376,6 +385,8 @@ int main(int argc, char** argv) {
               vfname, config, network, criterion, netoptim, critoptim);
         }
       }
+      // print brief stats on memory allocation (so far)
+      adapter->printInfo("Memory Manager Stats", 0 /* device id */);
     }
   };
 

@@ -198,6 +198,8 @@ if __name__ == "__main__":
         decoder_lexicon_name = "decoder-unigram-{sz}-nbest{n}.lexicon".format(
             sz=num_wordpieces, n=nbest
         )
+        lm_words.extend(lexicon_words)
+        lm_words.sort()
         with open(os.path.join(decoder_path, decoder_lexicon_name), "w") as f_lexicon:
             for word in lm_words:
                 wps = sp.NBestEncodeAsPieces(word, nbest)

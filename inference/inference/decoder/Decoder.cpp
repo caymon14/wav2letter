@@ -58,6 +58,8 @@ DecoderFactory::DecoderFactory(
     }
     std::cerr << "[Words] " << nWords << " words loaded.\n";
     unk_ = wordMap_.getIndex(kUnkToken);
+  } else {
+    wordMap_ = letterMap_;
   }
 
   /* 3. Load language model. */

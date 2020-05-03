@@ -39,12 +39,12 @@ void audioStreamToWordsStream(
     std::shared_ptr<Sequential> dnnModule,
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
-    int nTokens) {
+    int nTokens,
+    int kChunkSizeMsec) {
   constexpr const int lookBack = 0;
   constexpr const size_t kWavHeaderNumBytes = 44;
   constexpr const float kMaxUint16 = static_cast<float>(0x8000);
   constexpr const int kAudioWavSamplingFrequency = 16000; // 16KHz audio.
-  constexpr const int kChunkSizeMsec = 500;
 
   auto decoder = decoderFactory->createDecoder(decoderOptions);
 
@@ -115,6 +115,7 @@ void audioFileToWordsFileImpl(
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
     int nTokens,
+    int kChunkSizeMsec,
     std::ostream* errorStream) {
   std::ifstream inputFileStream(inputFileName, std::ios::binary);
   if (!inputFileStream.is_open()) {
@@ -146,7 +147,8 @@ void audioFileToWordsFileImpl(
       dnnModule,
       decoderFactory,
       decoderOptions,
-      nTokens);
+      nTokens,
+      kChunkSizeMsec);
 }
 
 } // namespace
@@ -158,6 +160,7 @@ void audioFileToWordsFile(
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
     int nTokens,
+    int kChunkSizeMsec,
     std::ostream& errorStream) {
   audioFileToWordsFileImpl(
       inputFileName,
@@ -166,6 +169,7 @@ void audioFileToWordsFile(
       decoderFactory,
       decoderOptions,
       nTokens,
+      kChunkSizeMsec,
       &errorStream);
 }
 
@@ -175,7 +179,8 @@ void audioFileToWordsFile(
     std::shared_ptr<streaming::Sequential> dnnModule,
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
-    int nTokens) {
+    int nTokens,
+    int kChunkSizeMsec) {
   audioFileToWordsFileImpl(
       inputFileName,
       outputFileName,
@@ -183,6 +188,7 @@ void audioFileToWordsFile(
       decoderFactory,
       decoderOptions,
       nTokens,
+      kChunkSizeMsec,
       nullptr);
 }
 

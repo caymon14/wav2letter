@@ -113,6 +113,10 @@ DEFINE_string(
     language_model_file,
     "language_model.bin",
     "binary file containing language module parameters.");
+DEFINE_int32(
+    chunk_size,
+    500,
+    "audio chunk size");
 DEFINE_string(
     decoder_options_file,
     "decoder_options.json",
@@ -122,7 +126,11 @@ DEFINE_string(
     ", silence insertion score, and use logadd when merging decoder nodes");
 
 std::string GetInputFileFullPath(const std::string& fileName) {
-  return GetFullPath(fileName, FLAGS_input_files_base_path);
+  if (fileName == "") {
+    return "";
+  } else {
+      return GetFullPath(fileName, FLAGS_input_files_base_path);
+  }
 }
 
 int main(int argc, char* argv[]) {
@@ -242,7 +250,8 @@ int main(int argc, char* argv[]) {
         dnnModule,
         decoderFactory,
         decoderOptions,
-        nTokens);
+        nTokens,
+        FLAGS_chunk_size);
   } else {
     const std::string input_audio_file =
         GetInputFileFullPath(FLAGS_input_audio_file);
@@ -256,7 +265,8 @@ int main(int argc, char* argv[]) {
         dnnModule,
         decoderFactory,
         decoderOptions,
-        nTokens);
+        nTokens,
+        FLAGS_chunk_size);
   }
 
   return 0;

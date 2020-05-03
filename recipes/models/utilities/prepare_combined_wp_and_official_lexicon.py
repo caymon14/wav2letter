@@ -71,7 +71,8 @@ if __name__ == "__main__":
             "ted-dev",
             "si84",
             "si284",
-            "commonvoice-dev"
+            "commonvoice-dev",
+            "librivox_6k"
         ],
         "dev": [
             "test-clean",
@@ -193,13 +194,6 @@ if __name__ == "__main__":
                         + " ".join([w.replace("\u2581", "_") for w in wp])
                         + "\n"
                     )
-                    if word in lexicon_words_train:
-                        f_lexicon_train.write(
-                            word
-                            + "\t"
-                            + " ".join([w.replace("\u2581", "_") for w in wp])
-                            + "\n"
-                        )
         nbest = int(nbest)
         decoder_lexicon_name = "decoder-unigram-{sz}-nbest{n}.lexicon".format(
             sz=num_wordpieces, n=nbest

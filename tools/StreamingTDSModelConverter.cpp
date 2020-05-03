@@ -360,7 +360,7 @@ int main(int argc, char** argv) {
   std::shared_ptr<streaming::IOBuffer> outputBuffer = outputState->buffer(0);
 
   LOG_IF(FATAL, outputBuffer->size<float>() != outputVec.size())
-      << "[Serialization Error] Incorrect output sizes";
+      << "[Serialization Error] Incorrect output sizes " << outputBuffer->size<float>() << "!=" << outputVec.size();
   float* outPtr = outputBuffer->data<float>();
   for (int i = 0; i < outputBuffer->size<float>(); i++) {
     float streamingOut = outPtr[i];

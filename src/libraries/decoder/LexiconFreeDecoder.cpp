@@ -69,7 +69,7 @@ void LexiconFreeDecoder::decodeStep(const float* emissions, int T, int N) {
             (opt_.criterionType == CriterionType::CTC && n != blank_ &&
              (n != prevIdx || prevHyp.prevBlank))) {
           auto lmStateScorePair = lm_->score(prevHyp.lmState, n);
-          auto lmScore = lmStateScorePair.second;
+          auto lmScore = pow(10, lmStateScorePair.second);
 
           candidatesAdd(
               candidates_,

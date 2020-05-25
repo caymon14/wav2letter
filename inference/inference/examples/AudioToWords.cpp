@@ -115,7 +115,7 @@ void audioFileToWordsFileImpl(
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
     int nTokens,
-    int kChunkSizeMsec,
+    int chunkSizeMsec,
     std::ostream* errorStream) {
   std::ifstream inputFileStream(inputFileName, std::ios::binary);
   if (!inputFileStream.is_open()) {
@@ -148,7 +148,7 @@ void audioFileToWordsFileImpl(
       decoderFactory,
       decoderOptions,
       nTokens,
-      kChunkSizeMsec);
+      chunkSizeMsec);
 }
 
 } // namespace
@@ -160,7 +160,7 @@ void audioFileToWordsFile(
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
     int nTokens,
-    int kChunkSizeMsec,
+    int chunkSizeMsec,
     std::ostream& errorStream) {
   audioFileToWordsFileImpl(
       inputFileName,
@@ -169,7 +169,7 @@ void audioFileToWordsFile(
       decoderFactory,
       decoderOptions,
       nTokens,
-      kChunkSizeMsec,
+      chunkSizeMsec,
       &errorStream);
 }
 
@@ -180,7 +180,7 @@ void audioFileToWordsFile(
     std::shared_ptr<const DecoderFactory> decoderFactory,
     const DecoderOptions& decoderOptions,
     int nTokens,
-    int kChunkSizeMsec) {
+    int chunkSizeMsec) {
   audioFileToWordsFileImpl(
       inputFileName,
       outputFileName,
@@ -188,7 +188,7 @@ void audioFileToWordsFile(
       decoderFactory,
       decoderOptions,
       nTokens,
-      kChunkSizeMsec,
+      chunkSizeMsec,
       nullptr);
 }
 

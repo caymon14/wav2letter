@@ -17,7 +17,7 @@ if (NOT TARGET fbgemm)
       GIT_TAG ${fbgemm_TAG}
       GIT_SUBMODULES
       BUILD_IN_SOURCE 1
-      BUILD_COMMAND ${CMAKE_COMMAND} --build . --config Release
+      BUILD_COMMAND ${CMAKE_COMMAND} --build . --config Release -j 8
       INSTALL_COMMAND ""
       CMAKE_CACHE_ARGS
           -DFBGEMM_BUILD_BENCHMARKS:BOOL=OFF

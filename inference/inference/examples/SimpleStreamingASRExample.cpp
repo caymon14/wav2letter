@@ -126,11 +126,9 @@ DEFINE_string(
     ", silence insertion score, and use logadd when merging decoder nodes");
 
 std::string GetInputFileFullPath(const std::string& fileName) {
-  if (fileName == "") {
+  if (fileName.empty())
     return "";
-  } else {
-      return GetFullPath(fileName, FLAGS_input_files_base_path);
-  }
+  return GetFullPath(fileName, FLAGS_input_files_base_path);
 }
 
 int main(int argc, char* argv[]) {

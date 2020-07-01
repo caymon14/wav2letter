@@ -14,7 +14,6 @@
 #include <unordered_map>
 
 #include "libraries/decoder/LexiconDecoder.h"
-#include <iostream>
 
 namespace w2l {
 
@@ -199,7 +198,6 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
         double wScore = emissions[t * N + w];
         if (wScore > amScore) {
           amScore += opt_.lmWeight * sumLmScore / counter;
-          std::cout << amScore << std::endl;
           //amScore -= 10.0;
         }
 

@@ -197,8 +197,8 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
         double amScore = emissions[t * N + n];        
         double wScore = emissions[t * N + w];
         if (wScore > amScore) {
-          amScore += opt_.lmWeight * sumLmScore / counter;
-          //amScore -= 10.0;
+          //amScore += opt_.lmWeight * sumLmScore / counter;
+          amScore -= opt_.lmWeight;
         }
 
         candidatesAdd(

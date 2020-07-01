@@ -33,6 +33,7 @@ struct DecoderOptions {
   double unkScore; // Unknown word insertion score
   double silScore; // Silence insertion score
   double eosScore; // Score for inserting an EOS
+  double blankScore; // Score for blank token
   bool logAdd; // If or not use logadd when merging hypothesis
   CriterionType criterionType; // CTC or ASG
 

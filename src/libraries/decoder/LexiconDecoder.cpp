@@ -57,9 +57,6 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
       const float lexMaxScore =
           prevLex == lexicon_->getRoot() ? 0 : prevLex->maxScore;
 
-      float sumLmScore = 0.;
-      int counter = 0;
-
       /* (1) Try children */
       for (int r = 0; r < std::min(opt_.beamSizeToken, N); ++r) {
         int n = idx[r];
@@ -95,8 +92,6 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
               lmState = prevHyp.lmState;
               lmScore = lex->maxScore - lexMaxScore;
             }
-            sumLmScore += lmScore;
-            ++counter;
             candidatesAdd(
                 candidates_,
                 candidatesBestScore_,
@@ -118,10 +113,8 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
           if (!isLmToken_) {
             auto lmStateScorePair = lm_->score(prevHyp.lmState, label);
             lmState = lmStateScorePair.first;
-            lmScore = lmStateScorePair.second - lexMaxScore;            
+            lmScore = lmStateScorePair.second - lexMaxScore;
           }
-          sumLmScore += lmScore;
-          ++counter;
           candidatesAdd(
               candidates_,
               candidatesBestScore_,
@@ -144,8 +137,6 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
             lmState = lmStateScorePair.first;
             lmScore = lmStateScorePair.second - lexMaxScore;
           }
-          sumLmScore += lmScore;
-          ++counter;
           candidatesAdd(
               candidates_,
               candidatesBestScore_,
@@ -197,8 +188,7 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
         double amScore = emissions[t * N + n];        
         double wScore = emissions[t * N + w];
         if (wScore > amScore) {
-          //amScore += opt_.lmWeight * sumLmScore / counter;
-          amScore -= opt_.lmWeight;
+          amScore -= opt_.blankScore;
         }
 
         candidatesAdd(

@@ -207,6 +207,7 @@ int main(int argc, char* argv[]) {
        cereal::make_nvp("unkScore", decoderOptions.unkScore),
        cereal::make_nvp("silScore", decoderOptions.silScore),
        cereal::make_nvp("eosScore", decoderOptions.eosScore),
+       cereal::make_nvp("blankScore", decoderOptions.blankScore),
        cereal::make_nvp("logAdd", decoderOptions.logAdd),
        cereal::make_nvp("criterionType", decoderOptions.criterionType));
   }

@@ -184,7 +184,13 @@ void LexiconDecoder::decodeStep(const float* emissions, int T, int N) {
       /* (3) CTC only, try blank */
       if (opt_.criterionType == CriterionType::CTC) {
         int n = blank_;
-        double amScore = emissions[t * N + n];
+        int w = idx[0];
+        double amScore = emissions[t * N + n];        
+        double wScore = emissions[t * N + w];
+        if (wScore > amScore) {
+          amScore -= opt_.blankScore;
+        }
+
         candidatesAdd(
             candidates_,
             candidatesBestScore_,

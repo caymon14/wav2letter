@@ -49,8 +49,8 @@ std::vector<af::array> W2lDataset::get(const int64_t idx) const {
     } else {
       feat = getFeatureData(idx);
     }
-  } catch (...) {
-    LOG(WARNING) << "Error loading dataset skipping to next " << idx;
+  } catch (const std::exception& exc) {
+    LOG(WARNING) << "Error loading dataset skipping to next " << idx << "\n" << exc.what();
     if (idx == 0) {
       return get(idx + 1);
     } else {

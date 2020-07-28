@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include <glog/logging.h>
 #include "Sound.h"
 
 #include <fstream>
@@ -225,7 +226,13 @@ std::vector<T> loadSound(const std::string& filename) {
   if (!f.is_open()) {
     throw std::runtime_error("could not open file " + filename);
   }
-  return loadSound<T>(f);
+  try
+  {
+    return loadSound<T>(f);
+  } catch (const std::exception& exc) {
+    LOG(INFO) << "Exception while reading file:" << filename << "\n" << exc.what();
+    throw;
+  }
 }
 
 template <typename T>

@@ -49,6 +49,7 @@ int main(int argc, char** argv) {
   std::string runStatus = argv[1];
   int64_t startEpoch = 0;
   int64_t startUpdate = 0;
+  LOG(ERROR) << "Grachev";
   if (argc <= 1) {
     LOG(FATAL) << gflags::ProgramUsage();
   }

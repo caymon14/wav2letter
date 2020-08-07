@@ -49,7 +49,6 @@ int main(int argc, char** argv) {
   std::string runStatus = argv[1];
   int64_t startEpoch = 0;
   int64_t startUpdate = 0;
-  LOG(ERROR) << "Grachev";
   if (argc <= 1) {
     LOG(FATAL) << gflags::ProgramUsage();
   }
@@ -149,6 +148,7 @@ int main(int argc, char** argv) {
   int worldSize = fl::getWorldSize();
   bool isMaster = (worldRank == 0);
 
+  LOG_MASTER(INFO) << "Grachev";
   LOG_MASTER(INFO) << "Gflags after parsing \n" << serializeGflags("; ");
   LOG_MASTER(INFO) << "Experiment path: " << runPath;
   LOG_MASTER(INFO) << "Experiment runidx: " << runIdx;

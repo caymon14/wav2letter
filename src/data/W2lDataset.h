@@ -41,7 +41,7 @@ class W2lDataset : public fl::Dataset {
 
   W2lFeatureData getFeatureDataAndPrefetch(const int64_t idx) const;
 
-  void shuffle(int seed);
+  virtual void shuffle(int seed);
 
  protected:
   DictionaryMap dicts_;

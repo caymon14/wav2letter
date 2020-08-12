@@ -7,6 +7,7 @@
  */
 
 #include "data/Utils.h"
+#include <random>
 
 namespace w2l {
 
@@ -14,9 +15,11 @@ std::vector<int64_t> sortSamples(
     const std::vector<SpeechSampleMetaInfo>& samples,
     const std::string& dataorder,
     const int64_t inputbinsize,
-    const int64_t outputbinsize) {
+    const int64_t outputbinsize,
+    int seed) {
   std::vector<int64_t> sortedIndices(samples.size());
   std::iota(sortedIndices.begin(), sortedIndices.end(), 0);
+  auto rng = std::mt19937(seed);
   if (dataorder.compare("input_spiral") == 0) {
     // Sort samples in increasing order of output bins. For samples in the same
     // output bin, sorting is done based on input size in alternating manner
@@ -59,7 +62,7 @@ std::vector<int64_t> sortSamples(
             return s1.reflength() < s2.reflength();
           } else {
             return s2.reflength() < s1.reflength();
-          }
+          } 
         });
   } else if (dataorder.compare("input") == 0) {
     // Sort by input size
@@ -70,13 +73,21 @@ std::vector<int64_t> sortSamples(
         [&](int64_t i1, int64_t i2) {
           auto& s1 = samples[i1];
           auto& s2 = samples[i2];
-          return s1.audiolength() < s2.audiolength();
+          int s1_x = s1.audiolength() / inputbinsize;
+          int s2_x = s2.audiolength() / inputbinsize;
+          if (s1_x != s2_x) {
+            return s1_x < s2_x;
+          } else {
+            return rand() % 2 == 0;
+          }
         });
   } // Default is no sorting.
 
   std::vector<int64_t> sortedSampleIndices(samples.size());
   for (size_t i = 0; i < sortedSampleIndices.size(); ++i) {
     sortedSampleIndices[i] = samples[sortedIndices[i]].index();
+    // auto& s = samples[sortedIndices[i]];
+    // LOG(INFO) << s.audiolength() << "  " << s.reflength();
   }
   return sortedSampleIndices;
 }

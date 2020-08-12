@@ -57,7 +57,8 @@ W2lBlobsDataset::W2lBlobsDataset(
       speechSamplesMetaInfo,
       FLAGS_dataorder,
       FLAGS_inputbinsize,
-      FLAGS_outputbinsize);
+      FLAGS_outputbinsize,
+      -1);
 
   shuffle(-1);
   LOG(INFO) << "Total batches (i.e. iters): " << sampleBatches_.size();

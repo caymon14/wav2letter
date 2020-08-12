@@ -34,8 +34,11 @@ class W2lListFilesDataset : public W2lDataset {
 
   virtual std::vector<float> loadSound(const std::string& audioHandle) const;
 
+  virtual void shuffle(int seed) override;
+
  private:
   std::vector<int64_t> sampleSizeOrder_;
+  std::vector<SpeechSampleMetaInfo> speechSamplesMetaInfo_;
   std::vector<SpeechSample> data_;
   LexiconMap lexicon_;
   bool includeWrd_;

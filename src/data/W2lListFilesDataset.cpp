@@ -10,6 +10,7 @@
 #include <functional>
 #include <numeric>
 
+
 #include "common/Defines.h"
 #include "data/W2lListFilesDataset.h"
 
@@ -35,32 +36,37 @@ W2lListFilesDataset::W2lListFilesDataset(
       << "Target dictionary does not exist";
 
   auto filesVec = split(',', filenames);
-  std::vector<SpeechSampleMetaInfo> speechSamplesMetaInfo;
+  speechSamplesMetaInfo_ = std::vector<SpeechSampleMetaInfo>();
   for (const auto& f : filesVec) {
     auto fullpath = pathsConcat(rootdir, trim(f));
     auto fileSampleInfo = loadListFile(fullpath);
-    speechSamplesMetaInfo.insert(
-        speechSamplesMetaInfo.end(),
+    speechSamplesMetaInfo_.insert(
+        speechSamplesMetaInfo_.end(),
         fileSampleInfo.begin(),
         fileSampleInfo.end());
   }
 
   filterSamples(
-      speechSamplesMetaInfo,
+      speechSamplesMetaInfo_,
       FLAGS_minisz,
       FLAGS_maxisz,
       FLAGS_mintsz,
       FLAGS_maxtsz);
-  sampleCount_ = speechSamplesMetaInfo.size();
-  sampleSizeOrder_ = sortSamples(
-      speechSamplesMetaInfo,
-      FLAGS_dataorder,
-      FLAGS_inputbinsize,
-      FLAGS_outputbinsize);
+  sampleCount_ = speechSamplesMetaInfo_.size();
 
   shuffle(-1);
   LOG(INFO) << "Total batches (i.e. iters): " << sampleBatches_.size();
 }
+
+void W2lListFilesDataset::shuffle(int seed) {
+  sampleSizeOrder_ = sortSamples(
+      speechSamplesMetaInfo_,
+      FLAGS_dataorder,
+      FLAGS_inputbinsize,
+      FLAGS_outputbinsize,
+      seed);
+  W2lDataset::shuffle(seed);
+  }
 
 W2lListFilesDataset::~W2lListFilesDataset() {
   threadpool_ = nullptr; // join all threads

@@ -89,7 +89,8 @@ std::vector<int64_t> sortSamples(
     const std::vector<SpeechSampleMetaInfo>& samples,
     const std::string& dataorder,
     const int64_t inputbinsize,
-    const int64_t outputbinsize);
+    const int64_t outputbinsize,
+    int seed);
 
 void filterSamples(
     std::vector<SpeechSampleMetaInfo>& samples,

@@ -67,6 +67,11 @@ std::vector<int64_t> sortSamples(
   } else if (dataorder.compare("input") == 0) {
     // Sort by input size
     VLOG(1) << "Doing data ordering by input";
+    auto n = sortedIndices.size();
+    // custom implementation of shuffle - https://stackoverflow.com/a/51931164
+    for (auto i = n; i >= 1; --i) {
+      std::swap(sortedIndices[i - 1], sortedIndices[rng() % n]);
+    }
     std::sort(
         sortedIndices.begin(),
         sortedIndices.end(),
@@ -75,11 +80,7 @@ std::vector<int64_t> sortSamples(
           auto& s2 = samples[i2];
           int s1_x = s1.audiolength() / inputbinsize;
           int s2_x = s2.audiolength() / inputbinsize;
-          if (s1_x != s2_x) {
-            return s1_x < s2_x;
-          } else {
-            return rand() % 2 == 0;
-          }
+          return s1_x < s2_x;
         });
   } // Default is no sorting.
 
